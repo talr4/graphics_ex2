@@ -2,15 +2,16 @@ package Objects;
 
 public abstract class Surface {
 	
-	int materialIndex;
+	Material material;
 
-	//Getters and Setters
-	public int getMaterialIndex() {
-		return materialIndex;
+	public Material getMaterial() {
+		return material;
 	}
 
-	public void setMaterialIndex(int materialIndex) {
-		this.materialIndex = materialIndex;
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
+	
+	
 	
 }

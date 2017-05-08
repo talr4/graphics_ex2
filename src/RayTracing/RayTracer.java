@@ -1,7 +1,7 @@
 package RayTracing;
 
+import java.awt.*;
 import java.awt.Transparency;
-import java.awt.color.*;
 import java.awt.image.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,8 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.imageio.ImageIO;
+import Objects.*;
 
 /**
  *  Main class for ray tracing exercise.
@@ -74,8 +74,9 @@ public class RayTracer {
 		String line = null;
 		int lineNum = 0;
 		System.out.println("Started parsing scene file " + sceneFileName);
-
-
+		
+		Scene scene = new Scene();
+		
 
 		while ((line = r.readLine()) != null)
 		{
@@ -94,19 +95,53 @@ public class RayTracer {
 
 				if (code.equals("cam"))
 				{
-                                        // Add code here to parse camera parameters
-
+					Camera camera = new Camera();
+					
+					Vector position = new Vector();
+					position.setX(Double.parseDouble(params[0]));
+					position.setY(Double.parseDouble(params[1]));
+					position.setZ(Double.parseDouble(params[2]));
+					camera.setPosition(position);
+					
+					Vector lookAt = new Vector();
+					lookAt.setX(Double.parseDouble(params[3]));
+					lookAt.setY(Double.parseDouble(params[4]));
+					lookAt.setZ(Double.parseDouble(params[5]));
+					camera.setLookAt(lookAt);
+					
+					Vector up = new Vector();
+					up.setX(Double.parseDouble(params[6]));
+					up.setY(Double.parseDouble(params[7]));
+					up.setZ(Double.parseDouble(params[8]));
+					camera.setUp(up);
+					
+					camera.setScreenDistance(Double.parseDouble(params[9]));
+					camera.setScreenWidth(Double.parseDouble(params[10]));
+					
+					scene.setCamera(camera);
+					
 					System.out.println(String.format("Parsed camera parameters (line %d)", lineNum));
 				}
 				else if (code.equals("set"))
 				{
-                                        // Add code here to parse general settings parameters
-
+					int bgr = Integer.parseInt(params[0]);
+					int bgg = Integer.parseInt(params[1]);
+					int bgb = Integer.parseInt(params[2]);
+					scene.setBackgroundColor(new Color(bgr, bgg, bgb));
+					
+					scene.setShadowRaysNumber(Integer.parseInt(params[3]));
+					scene.setMaxRecursionLevel(Integer.parseInt(params[4]));
+					scene.setSuperSamplingLevel(Integer.parseInt(params[5]));
+					
 					System.out.println(String.format("Parsed general settings (line %d)", lineNum));
 				}
 				else if (code.equals("mtl"))
 				{
-                                        // Add code here to parse material parameters
+					
+					int dr = Integer.parseInt(params[0]);
+					int dg = Integer.parseInt(params[1]);
+					int db = Integer.parseInt(params[2]);
+					scene.setBackgroundColor(new Color(dr, dg, db));                 
 
 					System.out.println(String.format("Parsed material (line %d)", lineNum));
 				}

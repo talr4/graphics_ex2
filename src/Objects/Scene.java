@@ -10,6 +10,7 @@ public class Scene {
 	private int superSamplingLevel;
 	private Camera camera;
 	private Surface[] surfaces;
+	private Material[] materials;
 	
 	//Getters and Setters
 	public Color getBackgroundColor() {
