@@ -6,8 +6,8 @@ public class Camera {
 	private Vector Position;
 	private Vector lookAt;
 	private Vector up;
-	private double screenDistance;
-	private double screenWidth;
+	private Screen screen;
+
 	
 	public Vector getPosition() {
 		return Position;
@@ -27,18 +27,15 @@ public class Camera {
 	public void setUp(Vector up) {
 		this.up = up;
 	}
-	public double getScreenDistance() {
-		return screenDistance;
+	public Screen getScreen() {
+		return screen;
 	}
-	public void setScreenDistance(double screenDistance) {
-		this.screenDistance = screenDistance;
+	public void setScreen(Screen screen) {
+		this.screen = screen;
 	}
-	public double getScreenWidth() {
-		return screenWidth;
-	}
-	public void setScreenWidth(double screenWidth) {
-		this.screenWidth = screenWidth;
-	}	
+	
+	
+
 	
 	
 }
