@@ -2,19 +2,17 @@ package RayTracing;
 
 import java.awt.*;
 import java.awt.Transparency;
+import java.awt.color.ColorSpace;
 import java.awt.image.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import javax.imageio.ImageIO;
 import Objects.*;
 import Objects.Point;
 import Objects.Vector;
-
-import java.util.*;
 
 
 /**
@@ -71,7 +69,7 @@ public class RayTracer {
 	/**
 	 * Parses the scene file and creates the scene. Change this function so it generates the required objects.
 	 */
-	public void parseScene(String sceneFileName) throws IOException, RayTracerException
+	public Scene parseScene(String sceneFileName) throws IOException, RayTracerException
 	{
 		FileReader fr = new FileReader(sceneFileName);
 
@@ -81,7 +79,9 @@ public class RayTracer {
 		System.out.println("Started parsing scene file " + sceneFileName);
 		
 		Scene scene = new Scene();
-		scene.setMaterials(new ArrayList<Material>());
+		scene.materials = new ArrayList<Material>();
+		scene.surfaces = new ArrayList<Surface>();
+		scene.lights = new ArrayList<Light>();
 		
 		while ((line = r.readLine()) != null)
 		{
@@ -100,30 +100,25 @@ public class RayTracer {
 
 				if (code.equals("cam"))
 				{
-					Camera camera = new Camera();
 					
 					Point position = new Point();
 					position.setX(Double.parseDouble(params[0]));
 					position.setY(Double.parseDouble(params[1]));
 					position.setZ(Double.parseDouble(params[2]));
-					camera.setPosition(position);
 					
 					Point lookAt = new Point();
 					lookAt.setX(Double.parseDouble(params[3]));
 					lookAt.setY(Double.parseDouble(params[4]));
 					lookAt.setZ(Double.parseDouble(params[5]));
-					camera.setLookAt(lookAt);
-					
 
 					Vector up = new Vector(Double.parseDouble(params[6]), Double.parseDouble(params[7]), Double.parseDouble(params[8]));
-					camera.setUp(up);
 					
-					// TODO Tal: change
-					Screen screen = new Screen();
-					screen.setScreenDistance(Double.parseDouble(params[9]));
-					screen.setScreenWidth(Double.parseDouble(params[10]));
-					camera.setScreen(screen);
+					double screenDistance = (Double.parseDouble(params[9]));
+					double screenWidth = (Double.parseDouble(params[10]));
 					
+					Screen screen = calculateScreen(position, lookAt, screenWidth, screenDistance, up, imageWidth, imageHeight);
+					
+					Camera camera = new Camera(position, lookAt, up, screen);
 					scene.setCamera(camera);
 					
 					System.out.println(String.format("Parsed camera parameters (line %d)", lineNum));
@@ -148,8 +143,7 @@ public class RayTracer {
 					int dg = Integer.parseInt(params[1]);
 					int db = Integer.parseInt(params[2]);
 					Color diffuseColor = new Color(dr, dg, db);
-					      
-					
+					      					
 					int sr = Integer.parseInt(params[3]);
 					int sg = Integer.parseInt(params[4]);
 					int sb = Integer.parseInt(params[5]);
@@ -163,38 +157,89 @@ public class RayTracer {
 					double phong = Double.parseDouble(params[9]);
 					double transparency = Double.parseDouble(params[10]);
 					
-					scene.getMaterials().add(new Material(diffuseColor, specularColor, reflectionColor, phong, transparency));
+					scene.materials.add(new Material(diffuseColor, specularColor, reflectionColor, phong, transparency));
 
 					System.out.println(String.format("Parsed material (line %d)", lineNum));
 				}
 				else if (code.equals("sph"))
 				{
-                                        // Add code here to parse sphere parameters
-
-                                        // Example (you can implement this in many different ways!):
-					                    // Sphere sphere = new Sphere();
-                                        // sphere.setCenter(params[0], params[1], params[2]);
-                                        // sphere.setRadius(params[3]);
-                                        // sphere.setMaterial(params[4]);
-
+					
+					Double cx = Double.parseDouble(params[0]);
+					Double cy = Double.parseDouble(params[1]);
+					Double cz = Double.parseDouble(params[2]);
+					Point center = new Point(cx, cy, cz);
+					
+					double radius = Double.parseDouble(params[3]);
+					
+					int matIndex =  Integer.parseInt(params[4]);					
+					Material material = scene.materials.get(matIndex-1);
+					
+					Sphere sphere = new Sphere(center, radius, material);
+					scene.surfaces.add(sphere);
+					
 					System.out.println(String.format("Parsed sphere (line %d)", lineNum));
 				}
 				else if (code.equals("pln"))
 				{
-                                        // Add code here to parse plane parameters
+					Double nx = Double.parseDouble(params[0]);
+					Double ny = Double.parseDouble(params[1]);
+					Double nz = Double.parseDouble(params[2]);
+					Vector normal = new Vector(nx, ny, nz);
+					
+					double offset = Double.parseDouble(params[3]);
+					
+					int matIndex =  Integer.parseInt(params[4]);					
+					Material material = scene.materials.get(matIndex-1);
+					
+					Plane plane = new Plane(normal, offset, material);
+					scene.surfaces.add(plane);
 
 					System.out.println(String.format("Parsed plane (line %d)", lineNum));
 				}
 				else if (code.equals("trg"))
 				{
-                                        // Add code here to parse cylinder parameters
+					Double v1x = Double.parseDouble(params[0]);
+					Double v1y = Double.parseDouble(params[1]);
+					Double v1z = Double.parseDouble(params[2]);
+					Point v1 = new Point(v1x, v1y, v1z);	
+					
+					Double v2x = Double.parseDouble(params[3]);
+					Double v2y = Double.parseDouble(params[4]);
+					Double v2z = Double.parseDouble(params[5]);
+					Point v2 = new Point(v2x, v2y, v2z);	
+					
+					Double v3x = Double.parseDouble(params[6]);
+					Double v3y = Double.parseDouble(params[7]);
+					Double v3z = Double.parseDouble(params[8]);
+					Point v3 = new Point(v3x, v3y, v3z);	
+					
+					int matIndex =  Integer.parseInt(params[4]);					
+					Material material = scene.materials.get(matIndex-1);
+					
+					Triangle tri = new Triangle(v1, v2, v3, material);
+					scene.surfaces.add(tri);
 
 					System.out.println(String.format("Parsed cylinder (line %d)", lineNum));
 				}
 				else if (code.equals("lgt"))
 				{
-                                        // Add code here to parse light parameters
+					Double x = Double.parseDouble(params[0]);
+					Double y = Double.parseDouble(params[1]);
+					Double z = Double.parseDouble(params[2]);
+					Point position = new Point(x, y, z);
 
+					int r1 = Integer.parseInt(params[3]);
+					int g1 = Integer.parseInt(params[4]);
+					int b1 = Integer.parseInt(params[5]);
+					Color color = new Color(r1, g1, b1);
+					
+					double specularIntensity = Double.parseDouble(params[6]);
+					double shadowIntensity = Double.parseDouble(params[7]);
+					double lightRadius = Double.parseDouble(params[8]);
+					
+					Light light = new Light(position, color, specularIntensity, shadowIntensity, lightRadius);
+					scene.lights.add(light);
+					
 					System.out.println(String.format("Parsed light (line %d)", lineNum));
 				}
 				else
@@ -209,6 +254,8 @@ public class RayTracer {
 
 		System.out.println("Finished parsing scene file " + sceneFileName);
 		r.close();
+		
+		return scene;
 	}
 
 	/**

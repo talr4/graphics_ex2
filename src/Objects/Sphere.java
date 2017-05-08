@@ -2,22 +2,28 @@ package Objects;
 
 public class Sphere extends Surface {
 	
-	private Vector center;
-	private float radius;
+	private Point center;
+	private double radius;	
 	
-	
-	public Vector getCenter() {
-		return center;
-	}
-	public void setCenter(Vector center) {
+	public Sphere(Point center, double radius, Material material) {
+		super(material);
 		this.center = center;
-	}
-	public float getRadius() {
-		return radius;
-	}
-	public void setRadius(float radius) {
 		this.radius = radius;
 	}
+	
+	public Point getCenter() {
+		return center;
+	}
+	public void setCenter(Point center) {
+		this.center = center;
+	}
+	public double getRadius() {
+		return radius;
+	}
+	public void setRadius(double radius) {
+		this.radius = radius;
+	}
+
 	
 	
 	

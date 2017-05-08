@@ -7,7 +7,18 @@ public class Camera {
 	private Point lookAt;
 	private Vector up;
 	private Screen screen;
+	
+	
 
+	
+	public Camera(Point position, Point lookAt, Vector up, Screen screen) {
+		super();
+		Position = position;
+		this.lookAt = lookAt;
+		this.up = up;
+		this.screen = screen;
+	}
+	
 	
 	public Point getPosition() {
 		return Position;

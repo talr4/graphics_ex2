@@ -5,9 +5,20 @@ import java.awt.Color;
 public class Light {
 	private Point position;
 	private Color color;
-	private float specularIntensity;
-	private float shadowIntensity;
-	private float lightRadius;
+	private double specularIntensity;
+	private double shadowIntensity;
+	private double lightRadius;
+	
+	
+	
+	public Light(Point position, Color color, double specularIntensity, double shadowIntensity, double lightRadius) {
+		super();
+		this.position = position;
+		this.color = color;
+		this.specularIntensity = specularIntensity;
+		this.shadowIntensity = shadowIntensity;
+		this.lightRadius = lightRadius;
+	}
 	
 	public Point getPosition() {
 		return position;
@@ -21,22 +32,22 @@ public class Light {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public float getSpecularIntensity() {
+	public double getSpecularIntensity() {
 		return specularIntensity;
 	}
-	public void setSpecularIntensity(float specularIntensity) {
+	public void setSpecularIntensity(double specularIntensity) {
 		this.specularIntensity = specularIntensity;
 	}
-	public float getShadowIntensity() {
+	public double getShadowIntensity() {
 		return shadowIntensity;
 	}
-	public void setShadowIntensity(float shadowIntensity) {
+	public void setShadowIntensity(double shadowIntensity) {
 		this.shadowIntensity = shadowIntensity;
 	}
-	public float getLightRadius() {
+	public double getLightRadius() {
 		return lightRadius;
 	}
-	public void setLightRadius(float lightRadius) {
+	public void setLightRadius(double lightRadius) {
 		this.lightRadius = lightRadius;
 	}
 	
