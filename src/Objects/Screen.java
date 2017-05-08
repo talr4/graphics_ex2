@@ -7,7 +7,15 @@ public class Screen {
 	private double screenDistance;
 	private double screenWidth;
 	
+	private double pixelSize;
 	
+	public Screen(Point p, Vector horizontal, Vector vertical, double pixelSize) {
+		super();
+		this.p = p;
+		this.horizontal = horizontal;
+		this.vertical = vertical;
+		this.pixelSize = pixelSize;
+	}
 	public Point getP() {
 		return p;
 	}
@@ -34,9 +42,13 @@ public class Screen {
 	}
 	public double getScreenWidth() {
 		return screenWidth;
+	public double getPixelSize() {
+		return pixelSize;
 	}
 	public void setScreenWidth(double screenWidth) {
 		this.screenWidth = screenWidth;
+	public void setPixelSize(double pixelSize) {
+		this.pixelSize = pixelSize;
 	}
 	
 	
