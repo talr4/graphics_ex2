@@ -12,6 +12,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import Objects.*;
 import Objects.Point;
+import java.util.*;
 
 /**
  *  Main class for ray tracing exercise.
@@ -77,6 +78,7 @@ public class RayTracer {
 		System.out.println("Started parsing scene file " + sceneFileName);
 		
 		Scene scene = new Scene();
+		scene.setMaterials(new ArrayList<Material>());
 		
 		while ((line = r.readLine()) != null)
 		{
@@ -97,16 +99,19 @@ public class RayTracer {
 				{
 					Camera camera = new Camera();
 					
+					Point position = new Point();
 					position.setX(Double.parseDouble(params[0]));
 					position.setY(Double.parseDouble(params[1]));
 					position.setZ(Double.parseDouble(params[2]));
 					camera.setPosition(position);
 					
+					Point lookAt = new Point();
 					lookAt.setX(Double.parseDouble(params[3]));
 					lookAt.setY(Double.parseDouble(params[4]));
 					lookAt.setZ(Double.parseDouble(params[5]));
 					camera.setLookAt(lookAt);
 					
+<<<<<<< HEAD
 					Vector up = new Vector();
 					up.setX(Double.parseDouble(params[6]));
 					up.setY(Double.parseDouble(params[7]));
@@ -115,6 +120,16 @@ public class RayTracer {
 					
 					camera.setScreenDistance(Double.parseDouble(params[9]));
 					camera.setScreenWidth(Double.parseDouble(params[10]));
+=======
+					Vector up = new Vector(Double.parseDouble(params[6]), Double.parseDouble(params[7]), Double.parseDouble(params[8]));
+					camera.setUp(up);
+					
+					// TODO Tal: change
+					Screen screen = new Screen();
+					screen.setScreenDistance(Double.parseDouble(params[9]));
+					screen.setScreenWidth(Double.parseDouble(params[10]));
+					camera.setScreen(screen);
+>>>>>>> parent of 6732a86... fix colisions
 					
 					scene.setCamera(camera);
 					
@@ -135,9 +150,27 @@ public class RayTracer {
 				}
 				else if (code.equals("mtl"))
 				{
+
 					int dr = Integer.parseInt(params[0]);
 					int dg = Integer.parseInt(params[1]);
 					int db = Integer.parseInt(params[2]);
+					Color diffuseColor = new Color(dr, dg, db);
+					      
+					
+					int sr = Integer.parseInt(params[3]);
+					int sg = Integer.parseInt(params[4]);
+					int sb = Integer.parseInt(params[5]);
+					Color specularColor = new Color(sr, sg, sb);
+
+					int rr = Integer.parseInt(params[6]);
+					int rg = Integer.parseInt(params[7]);
+					int rb = Integer.parseInt(params[8]);
+					Color reflectionColor = new Color(rr, rg, rb);
+					
+					double phong = Double.parseDouble(params[9]);
+					double transparency = Double.parseDouble(params[10]);
+					
+					scene.getMaterials().add(new Material(diffuseColor, specularColor, reflectionColor, phong, transparency));
 
 					System.out.println(String.format("Parsed material (line %d)", lineNum));
 				}
@@ -261,17 +294,5 @@ public class RayTracer {
 		public RayTracerException(String msg) {  super(msg); }
 	}
 
-	public static Screen calculateScreen(Point camera, Point lookat, double width, double distance, Vector vertical,int horizontalPixels, int verticalPixels){
-		Vector toward = new Vector(camera.getX() - lookat.getX(), camera.getY() - lookat.getY(), camera.getZ() - lookat.getZ());
-		Vector horizontal = toward.crossProduct(vertical);
-		Ray in = new Ray(camera,toward);
-		Point screenMiddle = in.getPointOnRayByDistance(distance);
-		double pixelSize = width / horizontalPixels;
-		Ray left = new Ray(screenMiddle,horizontal);
-		Point screenMiddleLeft = left.getPointOnRayByDistance( (horizontalPixels / 2) * pixelSize);
-		Ray up = new Ray(screenMiddleLeft,vertical);
-		Point screenUpperLeft = up.getPointOnRayByDistance( (verticalPixels / 2) * pixelSize);
-		return new Screen(screenUpperLeft,horizontal,vertical,pixelSize);
-	}
 
 }
