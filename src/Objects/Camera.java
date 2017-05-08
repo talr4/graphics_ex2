@@ -3,22 +3,22 @@ package Objects;
 import java.awt.*;
 
 public class Camera {
-	private Vector Position;
-	private Vector lookAt;
+	private Point Position;
+	private Point lookAt;
 	private Vector up;
 	private Screen screen;
 
 	
-	public Vector getPosition() {
+	public Point getPosition() {
 		return Position;
 	}
-	public void setPosition(Vector position) {
+	public void setPosition(Point position) {
 		Position = position;
 	}
-	public Vector getLookAt() {
+	public Point getLookAt() {
 		return lookAt;
 	}
-	public void setLookAt(Vector lookAt) {
+	public void setLookAt(Point lookAt) {
 		this.lookAt = lookAt;
 	}
 	public Vector getUp() {

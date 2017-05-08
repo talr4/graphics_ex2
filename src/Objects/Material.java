@@ -6,9 +6,23 @@ public class Material {
 	
 	private Color diffuseColor;
 	private Color specularColor;
-	private Color ReflectionColor;
-	private float phong;
-	private float transparency;
+	private Color reflectionColor;
+	private double phong;
+	private double transparency;
+	
+	
+	
+	public Material(Color diffuseColor, Color specularColor, Color reflectionColor, double phong, double transparency) {
+		
+		this.diffuseColor = diffuseColor;
+		this.specularColor = specularColor;
+		this.reflectionColor = reflectionColor;
+		this.phong = phong;
+		this.transparency = transparency;
+		
+	}
+	
+	
 	
 	// Getters and Setters
 	public Color getDiffuseColor() {
@@ -24,21 +38,21 @@ public class Material {
 		this.specularColor = specularColor;
 	}
 	public Color getReflectionColor() {
-		return ReflectionColor;
+		return reflectionColor;
 	}
 	public void setReflectionColor(Color reflectionColor) {
-		ReflectionColor = reflectionColor;
+		this.reflectionColor = reflectionColor;
 	}
-	public float getPhong() {
+	public double getPhong() {
 		return phong;
 	}
-	public void setPhong(float phong) {
+	public void setPhong(double phong) {
 		this.phong = phong;
 	}
-	public float getTransparency() {
+	public double getTransparency() {
 		return transparency;
 	}
-	public void setTransparency(float transparency) {
+	public void setTransparency(double transparency) {
 		this.transparency = transparency;
 	}
 	

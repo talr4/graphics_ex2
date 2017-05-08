@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import Objects.*;
+import Objects.Point;
+import java.util.*;
 
 /**
  *  Main class for ray tracing exercise.
@@ -76,8 +78,8 @@ public class RayTracer {
 		System.out.println("Started parsing scene file " + sceneFileName);
 		
 		Scene scene = new Scene();
+		scene.setMaterials(new ArrayList<Material>());
 		
-
 		while ((line = r.readLine()) != null)
 		{
 			line = line.trim();
@@ -97,26 +99,26 @@ public class RayTracer {
 				{
 					Camera camera = new Camera();
 					
-					Vector position = new Vector();
+					Point position = new Point();
 					position.setX(Double.parseDouble(params[0]));
 					position.setY(Double.parseDouble(params[1]));
 					position.setZ(Double.parseDouble(params[2]));
 					camera.setPosition(position);
 					
-					Vector lookAt = new Vector();
+					Point lookAt = new Point();
 					lookAt.setX(Double.parseDouble(params[3]));
 					lookAt.setY(Double.parseDouble(params[4]));
 					lookAt.setZ(Double.parseDouble(params[5]));
 					camera.setLookAt(lookAt);
 					
-					Vector up = new Vector();
-					up.setX(Double.parseDouble(params[6]));
-					up.setY(Double.parseDouble(params[7]));
-					up.setZ(Double.parseDouble(params[8]));
+					Vector up = new Vector(Double.parseDouble(params[6]), Double.parseDouble(params[7]), Double.parseDouble(params[8]));
 					camera.setUp(up);
 					
-					camera.setScreenDistance(Double.parseDouble(params[9]));
-					camera.setScreenWidth(Double.parseDouble(params[10]));
+					// TODO Tal: change
+					Screen screen = new Screen();
+					screen.setScreenDistance(Double.parseDouble(params[9]));
+					screen.setScreenWidth(Double.parseDouble(params[10]));
+					camera.setScreen(screen);
 					
 					scene.setCamera(camera);
 					
@@ -137,11 +139,27 @@ public class RayTracer {
 				}
 				else if (code.equals("mtl"))
 				{
-					
+
 					int dr = Integer.parseInt(params[0]);
 					int dg = Integer.parseInt(params[1]);
 					int db = Integer.parseInt(params[2]);
-					scene.setBackgroundColor(new Color(dr, dg, db));                 
+					Color diffuseColor = new Color(dr, dg, db);
+					      
+					
+					int sr = Integer.parseInt(params[3]);
+					int sg = Integer.parseInt(params[4]);
+					int sb = Integer.parseInt(params[5]);
+					Color specularColor = new Color(sr, sg, sb);
+
+					int rr = Integer.parseInt(params[6]);
+					int rg = Integer.parseInt(params[7]);
+					int rb = Integer.parseInt(params[8]);
+					Color reflectionColor = new Color(rr, rg, rb);
+					
+					double phong = Double.parseDouble(params[9]);
+					double transparency = Double.parseDouble(params[10]);
+					
+					scene.getMaterials().add(new Material(diffuseColor, specularColor, reflectionColor, phong, transparency));
 
 					System.out.println(String.format("Parsed material (line %d)", lineNum));
 				}
