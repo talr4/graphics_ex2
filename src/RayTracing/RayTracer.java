@@ -27,8 +27,10 @@ public class RayTracer {
 	 * Runs the ray tracer. Takes scene file, output image file and image size as input.
 	 */
 	public static void main(String[] args) {
+		
+		calculateScreen(new Point(0,0,0), new Point(5,0,0), 4, 2, new Vector(0, 1, 0), 100, 100);
 
-		try {
+		/*try {
 
 			RayTracer tracer = new RayTracer();
 
@@ -61,7 +63,7 @@ public class RayTracer {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-		}
+		}*/
 
 
 	}
@@ -336,7 +338,7 @@ public class RayTracer {
 	
 
 	public static Screen calculateScreen(Point camera, Point lookat, double width, double distance, Vector vertical,int horizontalPixels, int verticalPixels){
-		Vector toward = new Vector(camera.getX() - lookat.getX(), camera.getY() - lookat.getY(), camera.getZ() - lookat.getZ());
+		Vector toward = new Vector(lookat.getX() - camera.getX(), lookat.getY() - camera.getY(), lookat.getZ() - camera.getZ());
 		Vector horizontal = toward.crossProduct(vertical);
 		Ray in = new Ray(camera,toward);
 		Point screenMiddle = in.getPointOnRayByDistance(distance);

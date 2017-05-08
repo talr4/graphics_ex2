@@ -37,8 +37,8 @@ public class Vector {
 	public void normalize(){
 		double length = length();
 		setX(getX() / length);
-		setX(getY() / length);
-		setX(getZ() / length);
+		setY(getY() / length);
+		setZ(getZ() / length);
 	}
 	
 	public double dotProduct(Vector other){
