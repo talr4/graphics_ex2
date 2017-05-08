@@ -107,8 +107,14 @@ public class RayTracer {
 					lookAt.setZ(Double.parseDouble(params[5]));
 					camera.setLookAt(lookAt);
 					
+					Vector up = new Vector();
+					up.setX(Double.parseDouble(params[6]));
+					up.setY(Double.parseDouble(params[7]));
+					up.setZ(Double.parseDouble(params[8]));
 					camera.setUp(up);
 					
+					camera.setScreenDistance(Double.parseDouble(params[9]));
+					camera.setScreenWidth(Double.parseDouble(params[10]));
 					
 					scene.setCamera(camera);
 					
