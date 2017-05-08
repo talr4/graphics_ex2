@@ -31,4 +31,18 @@ public class Point {
 		this.z = z;
 	}
 	
+	public Point add(Point other){
+		double newX = getX()+other.getX();
+		double newY = getY()+other.getY();
+		double newZ = getZ()+other.getZ();
+		return new Point(newX,newY,newZ);
+	}
+	
+	public Point multiply(double scalar){
+		double newX = getX()*scalar;
+		double newY = getY()*scalar;
+		double newZ = getZ()*scalar;
+		return new Point(newX,newY,newZ);
+	}
+	
 }
