@@ -1,6 +1,7 @@
 package Objects;
 
 import java.awt.Color;
+import java.util.List;
 
 public class Scene {
 	
@@ -9,6 +10,8 @@ public class Scene {
 	private int maxRecursionLevel;
 	private int superSamplingLevel;
 	private Camera camera;
+	private List<Surface> surfaces;
+	private List<Material> materials;
 	
 	//Getters and Setters
 	public Color getBackgroundColor() {
@@ -41,10 +44,19 @@ public class Scene {
 	public void setCamera(Camera camera) {
 		this.camera = camera;
 	}
+	public List<Surface> getSurfaces() {
 		return surfaces;
 	}
+	public void setSurfaces(List<Surface> surfaces) {
 		this.surfaces = surfaces;
 	}
+	public List<Material> getMaterials() {
+		return materials;
+	}
+	public void setMaterials(List<Material> materials) {
+		this.materials = materials;
+	}
+	
 	
 	
 }
