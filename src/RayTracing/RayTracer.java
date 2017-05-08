@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import Objects.*;
+import Objects.Point;
 
 /**
  *  Main class for ray tracing exercise.
@@ -265,5 +266,17 @@ public class RayTracer {
 		public RayTracerException(String msg) {  super(msg); }
 	}
 
+	public static Screen calculateScreen(Point camera, Point lookat, double width, double distance, Vector vertical,int horizontalPixels, int verticalPixels){
+		Vector toward = new Vector(camera.getX() - lookat.getX(), camera.getY() - lookat.getY(), camera.getZ() - lookat.getZ());
+		Vector horizontal = toward.crossProduct(vertical);
+		Ray in = new Ray(camera,toward);
+		Point screenMiddle = in.getPointOnRayByDistance(distance);
+		double pixelSize = width / horizontalPixels;
+		Ray left = new Ray(screenMiddle,horizontal);
+		Point screenMiddleLeft = left.getPointOnRayByDistance( (horizontalPixels / 2) * pixelSize);
+		Ray up = new Ray(screenMiddleLeft,vertical);
+		Point screenUpperLeft = up.getPointOnRayByDistance( (verticalPixels / 2) * pixelSize);
+		return new Screen(screenUpperLeft,horizontal,vertical,pixelSize);
+	}
 
 }
