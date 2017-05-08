@@ -16,6 +16,7 @@ import Objects.Vector;
 
 import java.util.*;
 
+
 /**
  *  Main class for ray tracing exercise.
  */
@@ -286,6 +287,7 @@ public class RayTracer {
 		public RayTracerException(String msg) {  super(msg); }
 	}
 	
+
 	public static Screen calculateScreen(Point camera, Point lookat, double width, double distance, Vector vertical,int horizontalPixels, int verticalPixels){
 		Vector toward = new Vector(camera.getX() - lookat.getX(), camera.getY() - lookat.getY(), camera.getZ() - lookat.getZ());
 		Vector horizontal = toward.crossProduct(vertical);
@@ -298,6 +300,5 @@ public class RayTracer {
 		Point screenUpperLeft = up.getPointOnRayByDistance( (verticalPixels / 2) * pixelSize);
 		return new Screen(screenUpperLeft,horizontal,vertical,pixelSize);
 	}
-
 
 }
