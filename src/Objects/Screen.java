@@ -1,23 +1,23 @@
 package Objects;
 
 public class Screen {
-	Point p; //Left up point
+	Point upperLeft; //Left up point
 	Vector horizontal;
 	Vector vertical;
 	private double pixelSize;
 	
-	public Screen(Point p, Vector horizontal, Vector vertical, double pixelSize) {
+	public Screen(Point upperLeft, Vector horizontal, Vector vertical, double pixelSize) {
 		super();
-		this.p = p;
+		this.upperLeft = upperLeft;
 		this.horizontal = horizontal;
 		this.vertical = vertical;
 		this.pixelSize = pixelSize;
 	}
-	public Point getP() {
-		return p;
+	public Point getUpperLeft() {
+		return upperLeft;
 	}
-	public void setP(Point p) {
-		this.p = p;
+	public void setUpperLeft(Point upperLeft) {
+		this.upperLeft = upperLeft;
 	}
 	public Vector getHorizontal() {
 		return horizontal;
