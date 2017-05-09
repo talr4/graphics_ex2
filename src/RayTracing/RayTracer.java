@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.imageio.ImageIO;
 import Objects.*;
 import Objects.Point;
@@ -27,10 +29,8 @@ public class RayTracer {
 	 * Runs the ray tracer. Takes scene file, output image file and image size as input.
 	 */
 	public static void main(String[] args) {
-		
-		calculateScreen(new Point(0,0,0), new Point(5,0,0), 4, 2, new Vector(0, 1, 0), 100, 100);
-
-		/*try {
+	
+		try {
 
 			RayTracer tracer = new RayTracer();
 
@@ -63,7 +63,7 @@ public class RayTracer {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-		}*/
+		}
 
 
 	}
@@ -347,7 +347,19 @@ public class RayTracer {
 		Point screenMiddleLeft = left.getPointOnRayByDistance( (horizontalPixels / 2) * pixelSize);
 		Ray up = new Ray(screenMiddleLeft,vertical);
 		Point screenUpperLeft = up.getPointOnRayByDistance( (verticalPixels / 2) * pixelSize);
-		return new Screen(screenUpperLeft,horizontal,vertical,pixelSize);
+		return new Screen(screenUpperLeft,horizontal.multiply(-1),vertical.multiply(-1),pixelSize);
+	}
+	
+	public static Ray getRayByPixel(Screen screen , Point camera, int x, int y){
+		Random random = new Random();
+		double xNoise = random.nextDouble() * screen.getPixelSize();
+		double yNoise = random.nextDouble() * screen.getPixelSize();
+		Ray right = new Ray(screen.getUpperLeft(),screen.getHorizontal());
+		Point screenRight = right.getPointOnRayByDistance(screen.getPixelSize() * x + xNoise);
+		Ray down = new Ray(screenRight,screen.getVertical());
+		Point screenPoint = down.getPointOnRayByDistance(screen.getPixelSize() * y + yNoise);
+		Vector direction = new Vector(screenPoint.getX() - camera.getX(), screenPoint.getY() - camera.getY(), screenPoint.getZ() - camera.getZ());
+		return new Ray(camera, direction);
 	}
 
 }
