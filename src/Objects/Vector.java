@@ -45,6 +45,10 @@ public class Vector {
 		return getX()*other.getX() + getY()*other.getY() + getZ()*other.getZ();
 	}
 	
+	public double dotProductWithPoint(Point other){
+		return getX()*other.getX() + getY()*other.getY() + getZ()*other.getZ();
+	}
+	
 	public Vector crossProduct(Vector other){
 		double newX = getY()*other.getZ() - getZ()*other.getY();
 		double newY = getZ()*other.getX() - getX()*other.getZ();

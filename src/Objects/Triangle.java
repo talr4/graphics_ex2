@@ -33,6 +33,12 @@ public class Triangle extends Surface {
 	public void setVertex3(Point vertex3) {
 		this.vertex3 = vertex3;
 	}
+
+	@Override
+	public Point findClosestIntesectionWithRay(Ray ray) {
+		
+		return null;
+	}
 	
 	
 
