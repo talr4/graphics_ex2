@@ -36,6 +36,13 @@ public class Triangle extends Surface {
 
 	@Override
 	public Point findClosestIntesectionWithRay(Ray ray) {
+		Vector v1 = new Vector(this.vertex1.getX() - ray.getPoint().getX(), this.vertex1.getY() - ray.getPoint().getY(), this.vertex1.getZ() - ray.getPoint().getZ());
+		Vector v2 = new Vector(this.vertex2.getX() - ray.getPoint().getX(), this.vertex2.getY() - ray.getPoint().getY(), this.vertex2.getZ() - ray.getPoint().getZ());
+		Vector N1 = v1.crossProduct(v2);
+		
+		
+		
+		
 		
 		return null;
 	}

@@ -41,7 +41,7 @@ public class Sphere extends Surface {
 			return null;
 		}
 		
-		double thc = this.radius*this.radius - squaredD;
+		double thc = Math.sqrt(this.radius*this.radius - squaredD);
 		
 		double t = tca - thc;
 		

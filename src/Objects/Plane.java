@@ -28,7 +28,11 @@ public class Plane extends Surface{
 
 	@Override
 	public Point findClosestIntesectionWithRay(Ray ray) {
-		double t = (this.normal.dotProductWithPoint(ray.getPoint())+this.offset)/(this.normal.dotProduct(ray.getVector()));
+		if(this.normal.dotProduct(ray.getVector()) == 0)
+		{
+			return null;
+		}
+		double t = -(this.normal.dotProductWithPoint(ray.getPoint())+this.offset)/(this.normal.dotProduct(ray.getVector()));
 		return ray.getPointOnRayByDistance(t);
 	}
 	
