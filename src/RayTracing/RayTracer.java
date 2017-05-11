@@ -14,7 +14,6 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import Objects.*;
 import Objects.Point;
-import Objects.Vector;
 
 
 /**
@@ -350,16 +349,22 @@ public class RayTracer {
 		return new Screen(screenUpperLeft,horizontal.multiply(-1),vertical.multiply(-1),pixelSize);
 	}
 	
-	public static Ray getRayByPixel(Screen screen , Point camera, int x, int y){
+	public static ArrayList<Ray> getRaysByPixel(Screen screen , Point camera, int x, int y , int superSampling){
+		ArrayList<Ray> rays = new ArrayList<Ray>();
 		Random random = new Random();
-		double xNoise = random.nextDouble() * screen.getPixelSize();
-		double yNoise = random.nextDouble() * screen.getPixelSize();
-		Ray right = new Ray(screen.getUpperLeft(),screen.getHorizontal());
-		Point screenRight = right.getPointOnRayByDistance(screen.getPixelSize() * x + xNoise);
-		Ray down = new Ray(screenRight,screen.getVertical());
-		Point screenPoint = down.getPointOnRayByDistance(screen.getPixelSize() * y + yNoise);
-		Vector direction = new Vector(screenPoint.getX() - camera.getX(), screenPoint.getY() - camera.getY(), screenPoint.getZ() - camera.getZ());
-		return new Ray(camera, direction);
+		for(int i = 0 ; i < superSampling; i++){
+			for(int j = 0 ; j < superSampling; j++){
+				double xNoise = random.nextDouble() * (screen.getPixelSize() / superSampling);
+				double yNoise = random.nextDouble() * (screen.getPixelSize() / superSampling);
+				Ray right = new Ray(screen.getUpperLeft(),screen.getHorizontal());
+				Point screenRight = right.getPointOnRayByDistance(screen.getPixelSize() * x + (screen.getPixelSize() / superSampling) * j + xNoise);
+				Ray down = new Ray(screenRight,screen.getVertical());
+				Point screenPoint = down.getPointOnRayByDistance(screen.getPixelSize() * y + (screen.getPixelSize() / superSampling) * i + yNoise);
+				Vector direction = new Vector(screenPoint.getX() - camera.getX(), screenPoint.getY() - camera.getY(), screenPoint.getZ() - camera.getZ());
+				rays.add(new Ray(camera, direction));
+			}
+		}
+		return rays;
 	}
 
 }
