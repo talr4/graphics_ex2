@@ -25,9 +25,9 @@ public abstract class Surface {
 	
 	public Color getOutputColor(Color backgroundColor)
 	{
-		float r =(float)( backgroundColor.getRed()*material.getTransparency() + ((material.getDiffuseColor().getRed() + material.getSpecularColor().getRed())*(1-material.getTransparency())) + material.getReflectionColor().getRed());
-		float g =(float)( backgroundColor.getGreen()*material.getTransparency() + ((material.getDiffuseColor().getGreen() + material.getSpecularColor().getGreen())*(1-material.getTransparency())) + material.getReflectionColor().getGreen());
-		float b =(float)( backgroundColor.getBlue()*material.getTransparency() + ((material.getDiffuseColor().getBlue() + material.getSpecularColor().getBlue())*(1-material.getTransparency())) + material.getReflectionColor().getBlue());
+		int r =(int)( backgroundColor.getRed()*material.getTransparency() + ((material.getDiffuseColor().getRed() + material.getSpecularColor().getRed())*(1-material.getTransparency())) + material.getReflectionColor().getRed());
+		int g =(int)( backgroundColor.getGreen()*material.getTransparency() + ((material.getDiffuseColor().getGreen() + material.getSpecularColor().getGreen())*(1-material.getTransparency())) + material.getReflectionColor().getGreen());
+		int b =(int)( backgroundColor.getBlue()*material.getTransparency() + ((material.getDiffuseColor().getBlue() + material.getSpecularColor().getBlue())*(1-material.getTransparency())) + material.getReflectionColor().getBlue());
 		
 		return new Color(r, g, b);
 	}

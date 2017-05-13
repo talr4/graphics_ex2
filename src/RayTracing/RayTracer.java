@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -23,6 +24,7 @@ public class RayTracer {
 
 	public int imageWidth;
 	public int imageHeight;
+	public Scene scene;
 
 	/**
 	 * Runs the ray tracer. Takes scene file, output image file and image size as input.
@@ -51,7 +53,7 @@ public class RayTracer {
 
 
 			// Parse scene file:
-			tracer.parseScene(sceneFileName);
+			tracer.scene = tracer.parseScene(sceneFileName);
 
 			// Render scene:
 			tracer.renderScene(outputFileName);
@@ -140,19 +142,19 @@ public class RayTracer {
 				else if (code.equals("mtl"))
 				{
 
-					int dr = Integer.parseInt(params[0]);
-					int dg = Integer.parseInt(params[1]);
-					int db = Integer.parseInt(params[2]);
+					float dr = Float.parseFloat(params[0]);
+					float dg = Float.parseFloat(params[1]);
+					float db = Float.parseFloat(params[2]);
 					Color diffuseColor = new Color(dr, dg, db);
 					      					
-					int sr = Integer.parseInt(params[3]);
-					int sg = Integer.parseInt(params[4]);
-					int sb = Integer.parseInt(params[5]);
+					float sr = Float.parseFloat(params[3]);
+					float sg = Float.parseFloat(params[4]);
+					float sb = Float.parseFloat(params[5]);
 					Color specularColor = new Color(sr, sg, sb);
 
-					int rr = Integer.parseInt(params[6]);
-					int rg = Integer.parseInt(params[7]);
-					int rb = Integer.parseInt(params[8]);
+					float rr = Float.parseFloat(params[6]);
+					float rg = Float.parseFloat(params[7]);
+					float rb = Float.parseFloat(params[8]);
 					Color reflectionColor = new Color(rr, rg, rb);
 					
 					double phong = Double.parseDouble(params[9]);
@@ -229,9 +231,9 @@ public class RayTracer {
 					Double z = Double.parseDouble(params[2]);
 					Point position = new Point(x, y, z);
 
-					int r1 = Integer.parseInt(params[3]);
-					int g1 = Integer.parseInt(params[4]);
-					int b1 = Integer.parseInt(params[5]);
+					float r1 = Float.parseFloat(params[3]);
+					float g1 = Float.parseFloat(params[4]);
+					float b1 = Float.parseFloat(params[5]);
 					Color color = new Color(r1, g1, b1);
 					
 					double specularIntensity = Double.parseDouble(params[6]);
@@ -269,6 +271,42 @@ public class RayTracer {
 		// Create a byte array to hold the pixel data:
 		byte[] rgbData = new byte[this.imageWidth * this.imageHeight * 3];
 
+		for(int x = 0 ; x < this.imageWidth; x++){
+			for(int y = 0 ; y < this.imageHeight; y++){
+				ArrayList<Ray> rays = getRaysByPixel(scene.getCamera().getScreen(), scene.getCamera().getPosition(), x, y, scene.getSuperSamplingLevel());
+				ArrayList<Color> colors = new ArrayList<>();
+				for(Ray ray : rays){
+					Surface closestSurface = null;
+					Point closestIntersection = null;
+					for(Surface surface : scene.getSurfaces()){
+						Point intersection = surface.findClosestIntesectionWithRay(ray);
+						if (intersection != null){
+							if(closestIntersection == null || scene.getCamera().getPosition().FindDistanceFromPoint(intersection) < scene.getCamera().getPosition().FindDistanceFromPoint(closestIntersection)){
+								closestIntersection = intersection;
+								closestSurface = surface;
+							}
+						}
+					}
+					if(closestSurface != null){
+						colors.add(closestSurface.getOutputColor(scene.getBackgroundColor()));
+					}
+				}
+				int red = 0;
+				int green = 0;
+				int blue = 0;
+				for(Color color : colors){
+					red += color.getRed();
+					green += color.getGreen();
+					blue += color.getBlue();
+				}
+				red = red / colors.size();
+				green = green / colors.size();
+				blue = blue / colors.size();
+				rgbData[(y * this.imageWidth + x) * 3] = (byte)red;
+				rgbData[(y * this.imageWidth + x) * 3 + 1] = (byte)green;
+				rgbData[(y * this.imageWidth + x) * 3 + 2] = (byte)blue;
+			}
+		}
 
                 // Put your ray tracing code here!
                 //
