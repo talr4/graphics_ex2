@@ -27,15 +27,14 @@ public class Sphere extends Surface {
 	@Override
 	public  Point findClosestIntesectionWithRay(Ray ray)
 	{
-		double L = center.FindDistanceFromPoint(ray.getPoint());
-		Point Middle = ray.getPointOnRayByDistance(L);
-		double tca = ray.getPoint().FindDistanceFromPoint(Middle);
+		Point L = new Point (center.getX() - ray.getPoint().getX(), center.getY() - ray.getPoint().getY(), center.getZ() - ray.getPoint().getZ());
+		double tca = ray.getVector().dotProductWithPoint(L);
 		if(tca < 0)
 		{
 			return null;
 		}
 		
-		double squaredD = (L*L) - (tca*tca);
+		double squaredD = L.dotProduct(L) - (tca*tca);
 		if(squaredD > this.radius*this.radius)
 		{
 			return null;

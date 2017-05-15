@@ -51,4 +51,8 @@ public class Point {
 		
 	}
 	
+	public double dotProduct(Point other){
+		return getX()*other.getX() + getY()*other.getY() + getZ()*other.getZ();
+	}
+	
 }
