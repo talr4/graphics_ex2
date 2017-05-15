@@ -9,7 +9,7 @@ public class Plane extends Surface{
 	
 	public Plane(Vector normal, double offset, Material material) {
 		super(material);
-		this.normal = normal;
+		this.normal = normal.multiply(-1);
 		this.offset = offset;
 	}
 	
