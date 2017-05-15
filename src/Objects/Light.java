@@ -51,10 +51,5 @@ public class Light {
 		this.lightRadius = lightRadius;
 	}
 	
-	public void getReflectedIntensityByPoint(Point point, Material material)
-	{
-		float r = material.getDiffuseColor().
-	}
-	
 	
 }

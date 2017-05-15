@@ -24,11 +24,6 @@ public class Sphere extends Surface {
 		this.radius = radius;
 	}
 	
-	public Vector getNormalByPoint(Point point)
-	{
-		return new Vector(point.getX()-center.getX(), point.getY()-center.getY(), point.getZ()-center.getZ());
-	}
-	
 	@Override
 	public  Point findClosestIntesectionWithRay(Ray ray)
 	{

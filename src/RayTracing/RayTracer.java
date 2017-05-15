@@ -281,15 +281,18 @@ public class RayTracer {
 					for(Surface surface : scene.getSurfaces()){
 						Point intersection = surface.findClosestIntesectionWithRay(ray);
 						if (intersection != null){
-							if(closestIntersection == null || scene.getCamera().getPosition().FindDistanceFromPoint(intersection) < scene.getCamera().getPosition().FindDistanceFromPoint(closestIntersection)){
+							if(closestIntersection == null){
+								closestIntersection = intersection;
+								closestSurface = surface;
+							}else if( scene.getCamera().getPosition().FindDistanceFromPoint(intersection) < scene.getCamera().getPosition().FindDistanceFromPoint(closestIntersection)){
 								closestIntersection = intersection;
 								closestSurface = surface;
 							}
 						}
 					}
-//					if(closestSurface != null){
-//						colors.add(closestSurface.getOutputColor(scene.getBackgroundColor()));
-//					}
+					if(closestSurface != null){
+						colors.add(closestSurface.getOutputColor(scene.getBackgroundColor()));
+					}
 				}
 				int red = 0;
 				int green = 0;
@@ -299,9 +302,11 @@ public class RayTracer {
 					green += color.getGreen();
 					blue += color.getBlue();
 				}
-				red = red / colors.size();
-				green = green / colors.size();
-				blue = blue / colors.size();
+				if(colors.size() > 0){
+					red = red / colors.size();
+					green = green / colors.size();
+					blue = blue / colors.size();
+				}
 				rgbData[(y * this.imageWidth + x) * 3] = (byte)red;
 				rgbData[(y * this.imageWidth + x) * 3 + 1] = (byte)green;
 				rgbData[(y * this.imageWidth + x) * 3 + 2] = (byte)blue;
