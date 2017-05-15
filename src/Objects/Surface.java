@@ -31,18 +31,21 @@ public abstract class Surface {
 	
 	public Color getOutputColorInPoint(Point point, Scene scene)
 	{
+		float r = 0;
+		float g = 0;
+		float b = 0;
 		for (Light light: scene.lights)
 		{
+			
 			Vector v = new Vector(light.getPosition().getX() - point.getX(), light.getPosition().getY() - point.getY(), light.getPosition().getZ() - point.getZ());
 			Ray ray = new Ray(point, v);
 			
-			float r = light.getReflectedIntensityR(point, this, ray);
-			float g = light.getReflectedIntensityG(point, this, ray);
-			float b = light.getReflectedIntensityB(point, this, ray);
-		
-			
+			r += light.getReflectedIntensityR(point, this, ray);
+			g += light.getReflectedIntensityG(point, this, ray);
+			b += light.getReflectedIntensityB(point, this, ray);
+					
 		}
-		return new Color(material.getDr(), material.dg, material.db);
+		return new Color(r, g, b);
 	}
 	
 	public abstract Vector getNormal(Point p);
