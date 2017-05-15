@@ -287,9 +287,9 @@ public class RayTracer {
 							}
 						}
 					}
-					if(closestSurface != null){
-						colors.add(closestSurface.getOutputColor(scene.getBackgroundColor()));
-					}
+//					if(closestSurface != null){
+//						colors.add(closestSurface.getOutputColor(scene.getBackgroundColor()));
+//					}
 				}
 				int red = 0;
 				int green = 0;

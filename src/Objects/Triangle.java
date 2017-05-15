@@ -33,6 +33,15 @@ public class Triangle extends Surface {
 	public void setVertex3(Point vertex3) {
 		this.vertex3 = vertex3;
 	}
+	
+	public Vector getNormal()
+	{
+		Vector vector1 = new Vector(vertex3.getX() - vertex1.getX(), vertex3.getY() - vertex1.getY(), vertex3.getZ() - vertex1.getZ());
+		Vector vector2 = new Vector(vertex3.getX() - vertex2.getX(), vertex3.getY() - vertex2.getY(), vertex3.getZ() - vertex2.getZ());
+		Vector normal = vector1.crossProduct(vector2);
+		
+		return normal;
+	}
 
 	@Override
 	public Point findClosestIntesectionWithRay(Ray ray) {
@@ -56,7 +65,8 @@ public class Triangle extends Surface {
 		Vector v1 = new Vector(this.vertex1.getX() - ray.getPoint().getX(), this.vertex1.getY() - ray.getPoint().getY(), this.vertex1.getZ() - ray.getPoint().getZ());
 		Vector v2 = new Vector(this.vertex2.getX() - ray.getPoint().getX(), this.vertex2.getY() - ray.getPoint().getY(), this.vertex2.getZ() - ray.getPoint().getZ());
 		Vector N1 = v1.crossProduct(v2);
-		Point check = new Point(intersection.getX() - ray.getPoint().getX(), intersection.getY() - ray.getPoint().getY(), intersection.getZ() - ray.getPoint().getZ());
+		
+		Point check = new Point(intersection.getX() - ray.getPoint().getX(), intersection.getY() - ray.getPoint().getY(), intersection.getZ() - ray.getPoint().getZ());	
 		if(N1.dotProductWithPoint(check) < 0)
 		{
 			return null;
