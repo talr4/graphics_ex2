@@ -1,5 +1,7 @@
 package Objects;
 
+import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
+
 public class Triangle extends Surface {
 	
 	private Point vertex1;
@@ -35,13 +37,22 @@ public class Triangle extends Surface {
 	}
 
 	@Override
+	public Vector getNormal(Point p)
+	{
+		Vector vector1 = new Vector(vertex3.getX() - vertex1.getX(), vertex3.getY() - vertex1.getY(), vertex3.getZ() - vertex1.getZ());
+		Vector vector2 = new Vector(vertex3.getX() - vertex2.getX(), vertex3.getY() - vertex2.getY(), vertex3.getZ() - vertex2.getZ());
+		Vector normal = vector1.crossProduct(vector2);
+		
+		return normal;
+	}
+	@Override
 	public Point findClosestIntesectionWithRay(Ray ray) {
 		
 		// Find plane containing the triangle
 		Vector vector1 = new Vector(vertex3.getX() - vertex1.getX(), vertex3.getY() - vertex1.getY(), vertex3.getZ() - vertex1.getZ());
 		Vector vector2 = new Vector(vertex3.getX() - vertex2.getX(), vertex3.getY() - vertex2.getY(), vertex3.getZ() - vertex2.getZ());
 		Vector normal = vector1.crossProduct(vector2);
-		double offset = normal.dotProductWithPoint(vertex1);
+		float offset = normal.dotProductWithPoint(vertex1);
 		
 		Plane plane = new Plane(normal, offset, material);
 		

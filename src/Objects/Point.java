@@ -1,57 +1,57 @@
 package Objects;
 
 public class Point {
-	private double x;
-	private double y;
-	private double z;
+	private float x;
+	private float y;
+	private float z;
 	
 	public Point() {}
 	
-	public Point(double x, double y, double z) {
+	public Point(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-	public double getX() {
+	public float getX() {
 		return x;
 	}
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
-	public double getY() {
+	public float getY() {
 		return y;
 	}
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
-	public double getZ() {
+	public float getZ() {
 		return z;
 	}
-	public void setZ(double z) {
+	public void setZ(float z) {
 		this.z = z;
 	}
 	
 	public Point add(Point other){
-		double newX = getX()+other.getX();
-		double newY = getY()+other.getY();
-		double newZ = getZ()+other.getZ();
+		float newX = getX()+other.getX();
+		float newY = getY()+other.getY();
+		float newZ = getZ()+other.getZ();
 		return new Point(newX,newY,newZ);
 	}
 	
-	public Point multiply(double scalar){
-		double newX = getX()*scalar;
-		double newY = getY()*scalar;
-		double newZ = getZ()*scalar;
+	public Point multiply(float scalar){
+		float newX = getX()*scalar;
+		float newY = getY()*scalar;
+		float newZ = getZ()*scalar;
 		return new Point(newX,newY,newZ);
 	}
 	
-	public double FindDistanceFromPoint(Point p)
+	public float FindDistanceFromPoint(Point p)
 	{
-		return Math.sqrt((this.x - p.x)*(this.x - p.x) + (this.y - p.y)*(this.y - p.y) + (this.z-p.z)*(this.z - p.z));
+		return (float)Math.sqrt((this.x - p.x)*(this.x - p.x) + (this.y - p.y)*(this.y - p.y) + (this.z-p.z)*(this.z - p.z));
 		
 	}
 	
-	public double dotProduct(Point other){
+	public float dotProduct(Point other){
 		return getX()*other.getX() + getY()*other.getY() + getZ()*other.getZ();
 	}
 	

@@ -25,12 +25,27 @@ public abstract class Surface {
 	
 	public Color getOutputColor(Color backgroundColor)
 	{
-		int r = material.getDiffuseColor().getRed();
-		int g = material.getDiffuseColor().getGreen();
-		int b = material.getDiffuseColor().getBlue();
 		
-		return new Color(r, g, b);
+		return new Color(material.getDr(), material.dg, material.db);
 	}
+	
+	public Color getOutputColorInPoint(Point point, Scene scene)
+	{
+		for (Light light: scene.lights)
+		{
+			Vector v = new Vector(light.getPosition().getX() - point.getX(), light.getPosition().getY() - point.getY(), light.getPosition().getZ() - point.getZ());
+			Ray ray = new Ray(point, v);
+			
+			float r = light.getReflectedIntensityR(point, this, ray);
+			float g = light.getReflectedIntensityG(point, this, ray);
+			float b = light.getReflectedIntensityB(point, this, ray);
+		
+			
+		}
+		return new Color(material.getDr(), material.dg, material.db);
+	}
+	
+	public abstract Vector getNormal(Point p);
 	
 	
 }

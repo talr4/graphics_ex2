@@ -3,9 +3,9 @@ package Objects;
 public class Sphere extends Surface {
 	
 	private Point center;
-	private double radius;	
+	private float radius;	
 	
-	public Sphere(Point center, double radius, Material material) {
+	public Sphere(Point center, float radius, Material material) {
 		super(material);
 		this.center = center;
 		this.radius = radius;
@@ -17,32 +17,39 @@ public class Sphere extends Surface {
 	public void setCenter(Point center) {
 		this.center = center;
 	}
-	public double getRadius() {
+	public float getRadius() {
 		return radius;
 	}
-	public void setRadius(double radius) {
+	public void setRadius(float radius) {
 		this.radius = radius;
+	}
+	
+	@Override
+	public Vector getNormal(Point p)
+	{
+		Vector normal = new Vector(p.getX() - center.getX(), p.getY() - center.getY(), p.getZ() - center.getZ());
+		
+		return normal;
 	}
 	
 	@Override
 	public  Point findClosestIntesectionWithRay(Ray ray)
 	{
 		Point L = new Point (center.getX() - ray.getPoint().getX(), center.getY() - ray.getPoint().getY(), center.getZ() - ray.getPoint().getZ());
-		double tca = ray.getVector().dotProductWithPoint(L);
+		float tca = ray.getVector().dotProductWithPoint(L);
 		if(tca < 0)
 		{
 			return null;
 		}
 		
-		double squaredD = L.dotProduct(L) - (tca*tca);
+		float squaredD = L.dotProduct(L) - (tca*tca);
 		if(squaredD > this.radius*this.radius)
 		{
 			return null;
 		}
 		
-		double thc = Math.sqrt(this.radius*this.radius - squaredD);
-		
-		double t = tca - thc;
+		float thc = (float) Math.sqrt(this.radius*this.radius - squaredD);		
+		float t = tca - thc;
 		
 		return ray.getPointOnRayByDistance(t);
 	}

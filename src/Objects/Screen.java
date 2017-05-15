@@ -4,9 +4,9 @@ public class Screen {
 	Point upperLeft; //Left up point
 	Vector horizontal;
 	Vector vertical;
-	private double pixelSize;
+	private float pixelSize;
 	
-	public Screen(Point upperLeft, Vector horizontal, Vector vertical, double pixelSize) {
+	public Screen(Point upperLeft, Vector horizontal, Vector vertical, float pixelSize) {
 		super();
 		this.upperLeft = upperLeft;
 		this.horizontal = horizontal;
@@ -31,10 +31,10 @@ public class Screen {
 	public void setVertical(Vector vertical) {
 		this.vertical = vertical;
 	}
-	public double getPixelSize() {
+	public float getPixelSize() {
 		return pixelSize;
 	}
-	public void setPixelSize(double pixelSize) {
+	public void setPixelSize(float pixelSize) {
 		this.pixelSize = pixelSize;
 	}
 	

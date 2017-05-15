@@ -22,7 +22,7 @@ public class Ray {
 		this.vector = vector;
 	}
 	
-	public Point getPointOnRayByDistance(double distance){
+	public Point getPointOnRayByDistance(float distance){
 		Point p = new Point(vector.getX(),vector.getY(),vector.getZ());
 		return point.add(p.multiply(distance));
 	}
