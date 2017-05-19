@@ -5,6 +5,9 @@ import java.util.List;
 
 public class Scene {
 	
+	private float bgr;
+	private float bgg;
+	private float bgb;
 	private Color backgroundColor;
 	private int shadowRaysNumber;
 	private int maxRecursionLevel;
@@ -54,6 +57,25 @@ public class Scene {
 	public List<Light> getLights() {
 		return lights;
 	}
+	public float getBgr() {
+		return bgr;
+	}
+	public void setBgr(float bgr) {
+		this.bgr = bgr;
+	}
+	public float getBgg() {
+		return bgg;
+	}
+	public void setBgg(float bgg) {
+		this.bgg = bgg;
+	}
+	public float getBgb() {
+		return bgb;
+	}
+	public void setBgb(float bgb) {
+		this.bgb = bgb;
+	}
+	
 
 	
 	

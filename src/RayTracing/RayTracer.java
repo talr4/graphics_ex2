@@ -123,11 +123,14 @@ public class RayTracer {
 
 					System.out.println(String.format("Parsed camera parameters (line %d)", lineNum));
 				} else if (code.equals("set")) {
-					int bgr = Integer.parseInt(params[0]);
-					int bgg = Integer.parseInt(params[1]);
-					int bgb = Integer.parseInt(params[2]);
-					scene.setBackgroundColor(new Color(bgr, bgg, bgb));
-
+					float bgr = Float.parseFloat(params[0]);
+					float bgg = Float.parseFloat(params[1]);
+					float bgb = Float.parseFloat(params[2]);
+						
+					scene.setBgr(bgr);
+					scene.setBgg(bgg);
+					scene.setBgb(bgb);
+					
 					scene.setShadowRaysNumber(Integer.parseInt(params[3]));
 					scene.setMaxRecursionLevel(Integer.parseInt(params[4]));
 					scene.setSuperSamplingLevel(Integer.parseInt(params[5]));
