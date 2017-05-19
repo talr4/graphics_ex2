@@ -40,21 +40,35 @@ public abstract class Surface {
 			Vector v = new Vector(light.getPosition().getX() - point.getX(), light.getPosition().getY() - point.getY(), light.getPosition().getZ() - point.getZ());
 			Ray ray = new Ray(point, v);
 			
-			r += Math.abs(light.getReflectedIntensityR(point, this, ray));
-			g += Math.abs(light.getReflectedIntensityG(point, this, ray));
-			b += Math.abs(light.getReflectedIntensityB(point, this, ray));
-			if(g > 1)
+			// check if there is interfering object between the surface and the light
+			boolean isInterfered = false;
+			for (Surface surface : scene.getSurfaces())
 			{
-				g = 1;
+				if ( surface != this && surface.findClosestIntesectionWithRay(ray) != null)
+				{
+					isInterfered = true;
+				}
 			}
-			if(r > 1)
+			
+			if (isInterfered == false)
 			{
-				r = 1;
+				r += Math.abs(light.getReflectedIntensityR(point, this, ray));
+				g += Math.abs(light.getReflectedIntensityG(point, this, ray));
+				b += Math.abs(light.getReflectedIntensityB(point, this, ray));
+				if(g > 1)
+				{
+					g = 1;
+				}
+				if(r > 1)
+				{
+					r = 1;
+				}
+				if(b > 1)
+				{
+					b = 1;
+				}
 			}
-			if(b > 1)
-			{
-				b = 1;
-			}
+
 		}
 		return new Color(r, g, b);
 	}
