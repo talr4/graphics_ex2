@@ -40,10 +40,21 @@ public abstract class Surface {
 			Vector v = new Vector(light.getPosition().getX() - point.getX(), light.getPosition().getY() - point.getY(), light.getPosition().getZ() - point.getZ());
 			Ray ray = new Ray(point, v);
 			
-			r += light.getReflectedIntensityR(point, this, ray);
-			g += light.getReflectedIntensityG(point, this, ray);
-			b += light.getReflectedIntensityB(point, this, ray);
-					
+			r += Math.abs(light.getReflectedIntensityR(point, this, ray));
+			g += Math.abs(light.getReflectedIntensityG(point, this, ray));
+			b += Math.abs(light.getReflectedIntensityB(point, this, ray));
+			if(g > 1)
+			{
+				g = 1;
+			}
+			if(r > 1)
+			{
+				r = 1;
+			}
+			if(b > 1)
+			{
+				b = 1;
+			}
 		}
 		return new Color(r, g, b);
 	}
