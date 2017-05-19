@@ -34,6 +34,12 @@ public class Plane extends Surface{
 			return null;
 		}
 		float t = -(this.normal.dotProductWithPoint(ray.getPoint())+this.offset)/(this.normal.dotProduct(ray.getVector()));
+		
+		if ( t < 0 )
+		{
+			return null; // can't be seen by the camera
+		}
+		
 		return ray.getPointOnRayByDistance(t);
 	}
 	

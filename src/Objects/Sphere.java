@@ -51,6 +51,10 @@ public class Sphere extends Surface {
 		float thc = (float) Math.sqrt(this.radius*this.radius - squaredD);		
 		float t = tca - thc;
 		
+		if ( t < 0 )
+		{
+			return null; // can't be seen by the camera
+		}
 		return ray.getPointOnRayByDistance(t);
 	}
 
