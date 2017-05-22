@@ -274,7 +274,7 @@ public class RayTracer {
 						}
 					}
 					if (closestSurface != null) {
-						colors.add(closestSurface.getOutputColorInPoint(closestIntersection, scene));
+						colors.add(closestSurface.getOutputColorInPoint(closestIntersection, scene, ray));
 					}
 				}
 				int red = 0;
