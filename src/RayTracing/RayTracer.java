@@ -260,7 +260,7 @@ public class RayTracer {
 				for (Ray ray : rays) {
 					Intersection intersection = getIntersectionFromRay(ray);
 					if(intersection != null){
-						colors.add(intersection.getSurface().getOutputColorInPoint(intersection.getPoint(), scene));
+						colors.add(intersection.getSurface().getOutputColorInPoint(intersection.getPoint(), scene, ray));
 					}
 				}
 				int red = 0;
