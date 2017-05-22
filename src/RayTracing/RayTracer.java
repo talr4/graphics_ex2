@@ -378,7 +378,7 @@ public class RayTracer {
 		Vector horizontal = toward.crossProduct(vertical);
 		Ray in = new Ray(camera, toward);
 		Point screenMiddle = in.getPointOnRayByDistance(distance);
-		float pixelSize = width / horizontalPixels;
+		float pixelSize = width / horizontalPixels;	
 		Ray left = new Ray(screenMiddle, horizontal);
 		Point screenMiddleLeft = left.getPointOnRayByDistance((horizontalPixels / 2) * pixelSize);
 		Ray up = new Ray(screenMiddleLeft, vertical);

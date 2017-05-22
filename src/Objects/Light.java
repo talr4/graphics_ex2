@@ -1,6 +1,12 @@
 package Objects;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Random;
+import RayTracing.RayTracer;
+
+
+import javax.imageio.ImageIO;
 
 public class Light {
 	private Point position;
@@ -92,7 +98,50 @@ public class Light {
 
 		return (float) (surface.getMaterial().sb * Math.pow(rayFromViewer.getVector().dotProduct(R.getVector()), surface.getMaterial().getPhong())*this.getB()*specularIntensity);
 	}
-
+	
+	public float computeSoftShadowsCoef(Scene scene, Point point, Surface surface, Ray rayToLight)
+	{
+		int N = scene.getShadowRaysNumber();
+		Vector v = new Vector(2,6,7);
+		
+		Vector vertical = v.crossProduct(rayToLight.getVector());
+		
+		float distance = position.FindDistanceFromPoint(point);
+		
+		Screen screen = RayTracer.calculateScreen(this.position, point, this.lightRadius, distance, vertical, scene.getShadowRaysNumber(), scene.getShadowRaysNumber());
+		
+		ArrayList<Ray> rays = new ArrayList<Ray>();
+		int counter = 0;
+		for (int i = 0; i < scene.getShadowRaysNumber(); i++) {
+			for (int j = 0; j < scene.getShadowRaysNumber(); j++) {
+				
+				float xNoise = random.nextFloat() * (screen.getPixelSize());
+				float yNoise = random.nextFloat() * (screen.getPixelSize());
+				
+				Ray right = new Ray(screen.getUpperLeft(), screen.getHorizontal());
+				Point screenRight = right.getPointOnRayByDistance(screen.getPixelSize() * i + xNoise);
+				
+				Ray down = new Ray(screenRight, screen.getVertical());
+				Point screenPoint = down.getPointOnRayByDistance(screen.getPixelSize() * j + yNoise);
+				
+				Vector direction = new Vector(position, point);
+				Ray ray = new Ray(position, direction);
+				
+				boolean isInterfered = false;
+				for (Surface surface1 : scene.getSurfaces())
+				{
+					if ( surface1.findClosestIntesectionWithRay(rayToLight) != null)
+					{
+						counter++;
+						break;
+					}
+				}
+			}
+		}
+		
+		return counter / (N*N);
+	}
+	
 	public float getR() {
 		return r;
 	}

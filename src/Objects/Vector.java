@@ -11,6 +11,14 @@ public class Vector {
 		this.z = z;
 		normalize();
 	}
+	
+	public Vector(Point from, Point to) {
+		this.x = to.getX() - from.getX();
+		this.y = to.getY() - from.getY();
+		this.z = to.getZ() - from.getZ();
+		normalize();
+	}
+	
 	public float getX() {
 		return x;
 	}
