@@ -46,7 +46,9 @@ public abstract class Surface {
 			boolean isInterfered = false;
 			for (Surface surface : scene.getSurfaces())
 			{
-				if ( surface != this && surface.findClosestIntesectionWithRay(rayToLight) != null)
+				Point p = surface.findClosestIntesectionWithRay(rayToLight);
+				
+				if ( p != null && p.FindDistanceFromPoint(point) != 0)
 				{
 					isInterfered = true;
 				}
