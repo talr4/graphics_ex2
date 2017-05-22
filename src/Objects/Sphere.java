@@ -57,8 +57,5 @@ public class Sphere extends Surface {
 		}
 		return ray.getPointOnRayByDistance(t);
 	}
-
-	
-	
 	
 }

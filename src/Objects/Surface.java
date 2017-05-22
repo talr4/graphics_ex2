@@ -2,6 +2,8 @@ package Objects;
 
 import java.awt.Color;
 
+import RayTracing.RayTracer;
+
 public abstract class Surface {
 	
 	Material material;
@@ -29,7 +31,7 @@ public abstract class Surface {
 		return new Color(material.getDr(), material.dg, material.db);
 	}
 	
-	public Color getOutputColorInPoint(Point point, Scene scene, Ray rayFromViewer)
+	public Color getOutputColorInPoint(Point point, Scene scene, Ray rayFromViewer,RayTracer rayTracer , int recursionStep)
 	{
 		float r = 0;
 		float g = 0;
@@ -55,20 +57,24 @@ public abstract class Surface {
 				r += Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, rayFromViewer));
 				g += Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, rayFromViewer));
 				b += Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, rayFromViewer));
-				if(g > 1)
-				{
-					g = 1;
-				}
-				if(r > 1)
-				{
-					r = 1;
-				}
-				if(b > 1)
-				{
-					b = 1;
-				}
+				
 			}
 
+		}
+		
+		//Intersection rayTracer.get
+		
+		if(g > 1)
+		{
+			g = 1;
+		}
+		if(r > 1)
+		{
+			r = 1;
+		}
+		if(b > 1)
+		{
+			b = 1;
 		}
 		return new Color(r, g, b);
 	}
@@ -84,5 +90,8 @@ public abstract class Surface {
 		return new Ray(p,direction);
 	}
 	
+	public Ray getRefractedRay(Ray ray, Point p) {
+		return new Ray(p, ray.getVector());
+	}
 	
 }

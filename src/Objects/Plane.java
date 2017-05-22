@@ -43,7 +43,4 @@ public class Plane extends Surface{
 		return ray.getPointOnRayByDistance(t);
 	}
 	
-	
-	
-	
 }

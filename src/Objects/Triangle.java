@@ -75,7 +75,5 @@ public class Triangle extends Surface {
 		
 		return intersection;
 	}
-	
-	
 
 }
