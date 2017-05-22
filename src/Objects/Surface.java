@@ -75,5 +75,14 @@ public abstract class Surface {
 	
 	public abstract Vector getNormal(Point p);
 	
+	public Ray getReflectedRay(Ray ray ,Point p){
+		Vector Lminus = ray.getVector().multiply(-1);
+		Point L = new Point(Lminus.getX(), Lminus.getY(), Lminus.getZ());
+		Point N = new Point(getNormal(p).getX(), getNormal(p).getY(), getNormal(p).getZ());
+		Point R = N.multiply(N.dotProduct(L.multiply(2))).add(L.multiply(-1));
+		Vector direction = new Vector(R.getX(), R.getY(), R.getZ());
+		return new Ray(p,direction);
+	}
+	
 	
 }

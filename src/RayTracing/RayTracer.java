@@ -258,23 +258,9 @@ public class RayTracer {
 						y, scene.getSuperSamplingLevel());
 				ArrayList<Color> colors = new ArrayList<>();
 				for (Ray ray : rays) {
-					Surface closestSurface = null;
-					Point closestIntersection = null;
-					for (Surface surface : scene.getSurfaces()) {
-						Point intersection = surface.findClosestIntesectionWithRay(ray);
-						if (intersection != null) {
-							if (closestIntersection == null) {
-								closestIntersection = intersection;
-								closestSurface = surface;
-							} else if (scene.getCamera().getPosition().FindDistanceFromPoint(intersection) < scene
-									.getCamera().getPosition().FindDistanceFromPoint(closestIntersection)) {
-								closestIntersection = intersection;
-								closestSurface = surface;
-							}
-						}
-					}
-					if (closestSurface != null) {
-						colors.add(closestSurface.getOutputColorInPoint(closestIntersection, scene));
+					Intersection intersection = getIntersectionFromRay(ray);
+					if(intersection != null){
+						colors.add(intersection.getSurface().getOutputColorInPoint(intersection.getPoint(), scene));
 					}
 				}
 				int red = 0;
@@ -320,6 +306,29 @@ public class RayTracer {
 
 		System.out.println("Saved file " + outputFileName);
 
+	}
+
+	private Intersection getIntersectionFromRay(Ray ray){
+		Surface closestSurface = null;
+		Point closestIntersection = null;
+		for (Surface surface : scene.getSurfaces()) {
+			Point intersection = surface.findClosestIntesectionWithRay(ray);
+			if (intersection != null) {
+				if (closestIntersection == null) {
+					closestIntersection = intersection;
+					closestSurface = surface;
+				} else if (scene.getCamera().getPosition().FindDistanceFromPoint(intersection) < scene
+						.getCamera().getPosition().FindDistanceFromPoint(closestIntersection)) {
+					closestIntersection = intersection;
+					closestSurface = surface;
+				}
+			}
+		}
+		if (closestSurface != null) {
+			return new Intersection(closestSurface, closestIntersection);
+		}else{
+			return null;
+		}
 	}
 
 	//////////////////////// FUNCTIONS TO SAVE IMAGES IN PNG FORMAT
