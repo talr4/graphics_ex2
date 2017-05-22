@@ -33,6 +33,15 @@ public abstract class Surface {
 	
 	public Objects.Color getOutputColorInPoint(Point point, Scene scene, Ray ray, RayTracer rayTracer, int recursionStep)
 	{
+		float epsilon = (float)0.01;
+		Point normal = new Point(getNormal(point).getX(), getNormal(point).getY(), getNormal(point).getZ());
+		Point smallAddOn = normal.multiply(epsilon);
+		if(this instanceof Sphere){
+			point = point.add(smallAddOn);
+		}else{
+			point = point.add(smallAddOn.multiply(-1));
+		}
+		
 		float r = 0;
 		float g = 0;
 		float b = 0;
@@ -40,13 +49,14 @@ public abstract class Surface {
 		{
 			
 			Vector v = new Vector(light.getPosition().getX() - point.getX(), light.getPosition().getY() - point.getY(), light.getPosition().getZ() - point.getZ());
+			
 			Ray rayToLight = new Ray(point, v);
 			
 			// check if there is interfering object between the surface and the light
 			boolean isInterfered = false;
 			for (Surface surface : scene.getSurfaces())
 			{
-				if ( surface != this && surface.findClosestIntesectionWithRay(rayToLight) != null)
+				if (surface.findClosestIntesectionWithRay(rayToLight) != null)
 				{
 					isInterfered = true;
 				}
