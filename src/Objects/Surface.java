@@ -33,7 +33,7 @@ public abstract class Surface {
 	
 	public Objects.Color getOutputColorInPoint(Point point, Scene scene, Ray ray, RayTracer rayTracer, int recursionStep)
 	{
-		float epsilon = (float)0.01;
+		float epsilon = (float)0.0001;
 		Point normal = new Point(getNormal(point).getX(), getNormal(point).getY(), getNormal(point).getZ());
 		Point smallAddOn = normal.multiply(epsilon);
 		if(this instanceof Sphere){

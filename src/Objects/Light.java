@@ -131,7 +131,9 @@ public class Light {
 				boolean isInterfered = false;
 				for (Surface surface1 : scene.getSurfaces())
 				{
-					if ( surface1.findClosestIntesectionWithRay(rayToLight) != null)
+					Point p = surface1.findClosestIntesectionWithRay(ray);
+					
+					if ( p != null && p.FindDistanceFromPoint(point) != 0 )
 					{
 						counter++;
 						break;
