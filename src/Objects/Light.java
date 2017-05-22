@@ -112,6 +112,7 @@ public class Light {
 		
 		ArrayList<Ray> rays = new ArrayList<Ray>();
 		int counter = 0;
+		Random random = new Random();
 		for (int i = 0; i < scene.getShadowRaysNumber(); i++) {
 			for (int j = 0; j < scene.getShadowRaysNumber(); j++) {
 				
@@ -139,7 +140,7 @@ public class Light {
 			}
 		}
 		
-		return counter / (N*N);
+		return (float) (counter / (N*N));
 	}
 	
 	public float getR() {
