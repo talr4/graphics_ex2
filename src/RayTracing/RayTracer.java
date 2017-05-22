@@ -131,6 +131,8 @@ public class RayTracer {
 					scene.setBgg(bgg);
 					scene.setBgb(bgb);
 					
+					scene.setBackgroundColor(new Objects.Color(bgr, bgg, bgb));
+					
 					scene.setShadowRaysNumber(Integer.parseInt(params[3]));
 					scene.setMaxRecursionLevel(Integer.parseInt(params[4]));
 					scene.setSuperSamplingLevel(Integer.parseInt(params[5]));
@@ -276,6 +278,11 @@ public class RayTracer {
 					red = red / colors.size();
 					green = green / colors.size();
 					blue = blue / colors.size();
+				}else{
+					Color bgColor = new Color(scene.getBackgroundColor().getRed(), scene.getBackgroundColor().getGreen(), scene.getBackgroundColor().getBlue());
+					red = bgColor.getRed();
+					green = bgColor.getGreen();
+					blue = bgColor.getBlue();
 				}
 				rgbData[(y * this.imageWidth + x) * 3] = (byte) red;
 				rgbData[(y * this.imageWidth + x) * 3 + 1] = (byte) green;
