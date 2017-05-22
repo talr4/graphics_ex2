@@ -308,7 +308,7 @@ public class RayTracer {
 
 	}
 
-	private Intersection getIntersectionFromRay(Ray ray){
+	public Intersection getIntersectionFromRay(Ray ray){
 		Surface closestSurface = null;
 		Point closestIntersection = null;
 		for (Surface surface : scene.getSurfaces()) {

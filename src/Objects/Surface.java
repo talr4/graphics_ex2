@@ -31,7 +31,7 @@ public abstract class Surface {
 		return new Color(material.getDr(), material.dg, material.db);
 	}
 	
-	public Color getOutputColorInPoint(Point point, Scene scene, Ray rayFromViewer,RayTracer rayTracer , int recursionStep)
+	public Color getOutputColorInPoint(Point point, Scene scene, Ray ray,RayTracer rayTracer , int recursionStep)
 	{
 		float r = 0;
 		float g = 0;
@@ -54,15 +54,16 @@ public abstract class Surface {
 			
 			if (isInterfered == false)
 			{
-				r += Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, rayFromViewer));
-				g += Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, rayFromViewer));
-				b += Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, rayFromViewer));
+				r += Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, ray));
+				g += Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, ray));
+				b += Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, ray));
 				
 			}
 
 		}
 		
-		//Intersection rayTracer.get
+		Intersection reflectionIntersaection =  rayTracer.getIntersectionFromRay(getReflectedRay(ray, point));
+		Intersection refrectedIntersaection =  rayTracer.getIntersectionFromRay(getReflectedRay(ray, point));
 		
 		if(g > 1)
 		{
