@@ -31,7 +31,7 @@ public abstract class Surface {
 		return new Color(material.getDr(), material.dg, material.db);
 	}
 	
-	public Color getOutputColorInPoint(Point point, Scene scene, Ray ray,RayTracer rayTracer , int recursionStep)
+	public Color getOutputColorInPoint(Point point, Scene scene, Ray ray, RayTracer rayTracer, int recursionStep)
 	{
 		float r = 0;
 		float g = 0;
@@ -62,8 +62,43 @@ public abstract class Surface {
 
 		}
 		
-		Intersection reflectionIntersaection =  rayTracer.getIntersectionFromRay(getReflectedRay(ray, point));
-		Intersection refrectedIntersaection =  rayTracer.getIntersectionFromRay(getReflectedRay(ray, point));
+		// Added recursive color from reflected and refracted rays
+		Color nextSurfaceReflectedInteractionColor = null;
+		Color nextSurfaceRefractedInteractionColor = null;
+		if(recursionStep < scene.getMaxRecursionLevel()){
+			if(getMaterial().getRr() != 0 || getMaterial().getRg() != 0 || getMaterial().getRb() != 0){
+				Ray reflectedRay = getReflectedRay(ray, point);
+				Intersection reflectionIntersaection =  rayTracer.getIntersectionFromRay(reflectedRay);
+				if(reflectionIntersaection != null){
+					nextSurfaceReflectedInteractionColor = reflectionIntersaection.getSurface().getOutputColorInPoint(reflectionIntersaection.getPoint(), scene, reflectedRay, rayTracer, recursionStep+1);
+				}else{
+					nextSurfaceReflectedInteractionColor = scene.getBackgroundColor();
+				}
+			}
+			if(getMaterial().getTransparency() != 0){
+				Ray refractedRay = getRefractedRay(ray, point);
+				Intersection refractedIntersaection =  rayTracer.getIntersectionFromRay(refractedRay);
+				if(refractedIntersaection != null){
+					nextSurfaceRefractedInteractionColor = refractedIntersaection.getSurface().getOutputColorInPoint(refractedIntersaection.getPoint(), scene, refractedRay, rayTracer, recursionStep+1);
+				}else{
+					nextSurfaceRefractedInteractionColor = scene.getBackgroundColor();
+				}
+			}
+		}else{
+			nextSurfaceReflectedInteractionColor = scene.getBackgroundColor();
+			nextSurfaceRefractedInteractionColor = scene.getBackgroundColor();
+		}
+		
+		if(nextSurfaceReflectedInteractionColor != null){
+			r += getMaterial().getRr()*nextSurfaceReflectedInteractionColor.getRed();
+			g += getMaterial().getRg()*nextSurfaceReflectedInteractionColor.getGreen();
+			b += getMaterial().getRb()*nextSurfaceReflectedInteractionColor.getBlue();
+		}
+		if(nextSurfaceRefractedInteractionColor != null){
+			r += getMaterial().getTransparency()*nextSurfaceRefractedInteractionColor.getRed();
+			g += getMaterial().getTransparency()*nextSurfaceRefractedInteractionColor.getGreen();
+			b += getMaterial().getTransparency()*nextSurfaceRefractedInteractionColor.getBlue();
+		}
 		
 		if(g > 1)
 		{
