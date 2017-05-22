@@ -31,7 +31,7 @@ public abstract class Surface {
 		return new Color(material.getDr(), material.dg, material.db);
 	}
 	
-	public Color getOutputColorInPoint(Point point, Scene scene, Ray ray, RayTracer rayTracer, int recursionStep)
+	public Objects.Color getOutputColorInPoint(Point point, Scene scene, Ray ray, RayTracer rayTracer, int recursionStep)
 	{
 		float r = 0;
 		float g = 0;
@@ -63,8 +63,8 @@ public abstract class Surface {
 		}
 		
 		// Added recursive color from reflected and refracted rays
-		Color nextSurfaceReflectedInteractionColor = null;
-		Color nextSurfaceRefractedInteractionColor = null;
+		Objects.Color nextSurfaceReflectedInteractionColor = null;
+		Objects.Color nextSurfaceRefractedInteractionColor = null;
 		if(recursionStep < scene.getMaxRecursionLevel()){
 			if(getMaterial().getRr() != 0 || getMaterial().getRg() != 0 || getMaterial().getRb() != 0){
 				Ray reflectedRay = getReflectedRay(ray, point);
@@ -112,7 +112,7 @@ public abstract class Surface {
 		{
 			b = 1;
 		}
-		return new Color(r, g, b);
+		return new Objects.Color(r, g, b);
 	}
 	
 	public abstract Vector getNormal(Point p);

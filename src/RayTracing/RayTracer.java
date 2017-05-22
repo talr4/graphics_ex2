@@ -1,7 +1,7 @@
 package RayTracing;
 
 import java.awt.*;
-import java.awt.Transparency;
+import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
 import java.io.BufferedReader;
@@ -256,7 +256,7 @@ public class RayTracer {
 			for (int y = 0; y < this.imageHeight; y++) {
 				ArrayList<Ray> rays = getRaysByPixel(scene.getCamera().getScreen(), scene.getCamera().getPosition(), x,
 						y, scene.getSuperSamplingLevel());
-				ArrayList<Color> colors = new ArrayList<>();
+				ArrayList<Objects.Color> colors = new ArrayList<>();
 				for (Ray ray : rays) {
 					Intersection intersection = getIntersectionFromRay(ray);
 					if(intersection != null){
@@ -266,10 +266,11 @@ public class RayTracer {
 				int red = 0;
 				int green = 0;
 				int blue = 0;
-				for (Color color : colors) {
-					red += color.getRed();
-					green += color.getGreen();
-					blue += color.getBlue();
+				for (Objects.Color color : colors) {
+					Color intColor = new Color(color.getRed(), color.getGreen(), color.getBlue());
+					red += intColor.getRed();
+					green += intColor.getGreen();
+					blue += intColor.getBlue();
 				}
 				if (colors.size() > 0) {
 					red = red / colors.size();

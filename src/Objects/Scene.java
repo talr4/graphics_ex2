@@ -8,7 +8,7 @@ public class Scene {
 	private float bgr;
 	private float bgg;
 	private float bgb;
-	private Color backgroundColor;
+	private Objects.Color backgroundColor;
 	private int shadowRaysNumber;
 	private int maxRecursionLevel;
 	private int superSamplingLevel;
@@ -18,10 +18,10 @@ public class Scene {
 	public List<Light> lights;
 	
 	//Getters and Setters
-	public Color getBackgroundColor() {
+	public Objects.Color getBackgroundColor() {
 		return backgroundColor;
 	}
-	public void setBackgroundColor(Color backgroundColor) {
+	public void setBackgroundColor(Objects.Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 	public int getShadowRaysNumber() {
