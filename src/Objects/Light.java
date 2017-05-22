@@ -74,26 +74,23 @@ public class Light {
 	
 	public float getSpecularColorR(Point point, Surface surface, Ray rayToLight, Ray rayFromViewer) 
 	{
-		Vector H = new Vector(rayToLight.getVector().getX() + rayFromViewer.getVector().getX(), rayToLight.getVector().getY() + rayFromViewer.getVector().getY(), rayToLight.getVector().getZ() + rayFromViewer.getVector().getZ() );
-		
-		return (float) (surface.getMaterial().sr * Math.pow(H.dotProduct(surface.getNormal(point)), surface.getMaterial().getPhong())*this.getR()*specularIntensity);
-	
+		Ray R = surface.getReflectedRay(rayToLight,point);
+
+		return (float) (surface.getMaterial().sr * Math.pow(rayFromViewer.getVector().dotProduct(R.getVector()), surface.getMaterial().getPhong())*this.getR()*specularIntensity);
 	}
 	
 	public float getSpecularColorG(Point point, Surface surface, Ray rayToLight, Ray rayFromViewer) 
 	{
-		Vector H = new Vector(rayToLight.getVector().getX() + rayFromViewer.getVector().getX(), rayToLight.getVector().getY() + rayFromViewer.getVector().getY(), rayToLight.getVector().getZ() + rayFromViewer.getVector().getZ() );
-		
-		return (float) (surface.getMaterial().sg * Math.pow(H.dotProduct(surface.getNormal(point)), surface.getMaterial().getPhong())*this.getG()*specularIntensity);
-	
+		Ray R = surface.getReflectedRay(rayToLight,point);
+
+		return (float) (surface.getMaterial().sg * Math.pow(rayFromViewer.getVector().dotProduct(R.getVector()), surface.getMaterial().getPhong())*this.getG()*specularIntensity);
 	}
 	
 	public float getSpecularColorB(Point point, Surface surface, Ray rayToLight, Ray rayFromViewer) 
 	{
-		Vector H = new Vector(rayToLight.getVector().getX() + rayFromViewer.getVector().getX(), rayToLight.getVector().getY() + rayFromViewer.getVector().getY(), rayToLight.getVector().getZ() + rayFromViewer.getVector().getZ() );
-		
-		return (float) (surface.getMaterial().sb * Math.pow(H.dotProduct(surface.getNormal(point)), surface.getMaterial().getPhong())*this.getB()*specularIntensity);
-	
+		Ray R = surface.getReflectedRay(rayToLight,point);
+
+		return (float) (surface.getMaterial().sb * Math.pow(rayFromViewer.getVector().dotProduct(R.getVector()), surface.getMaterial().getPhong())*this.getB()*specularIntensity);
 	}
 
 	public float getR() {
