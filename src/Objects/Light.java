@@ -127,13 +127,12 @@ public class Light {
 				
 				Vector direction = new Vector(position, point);
 				Ray ray = new Ray(position, direction);
-				
-				boolean isInterfered = false;
+								
 				for (Surface surface1 : scene.getSurfaces())
 				{
 					Point p = surface1.findClosestIntesectionWithRay(ray);
 					
-					if ( p != null && p.FindDistanceFromPoint(point) != 0 )
+					if ( p != null )
 					{
 						counter++;
 						break;
@@ -142,7 +141,13 @@ public class Light {
 			}
 		}
 		
-		return (float) (counter / (N*N));
+		return (float) ( ((N*N) - counter) / (N*N));
+	}
+	
+	public float computeHardShadows(Ray rayToLight)
+	{
+		
+		return 0;
 	}
 	
 	public float getR() {
