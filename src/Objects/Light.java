@@ -111,7 +111,7 @@ public class Light {
 		Screen screen = RayTracer.calculateScreen(this.position, point, this.lightRadius, distance, vertical, scene.getShadowRaysNumber(), scene.getShadowRaysNumber());
 		
 		ArrayList<Ray> rays = new ArrayList<Ray>();
-		int counter = 0;
+		int badRaysCounter = 0;
 		Random random = new Random();
 		for (int i = 0; i < scene.getShadowRaysNumber(); i++) {
 			for (int j = 0; j < scene.getShadowRaysNumber(); j++) {
@@ -132,16 +132,17 @@ public class Light {
 				{
 					Point p = surface1.findClosestIntesectionWithRay(ray);
 					
-					if ( p != null )
+					if ( p != null && p.FindDistanceFromPoint(position) <= point.FindDistanceFromPoint(position) )
 					{
-						counter++;
+						badRaysCounter++;
 						break;
 					}
 				}
 			}
 		}
-		
-		return (float) ( ((N*N) - counter) / (N*N));
+		float allRaysCounter = (float)(N*N);
+		float goodRaysCounter = (float) (allRaysCounter - badRaysCounter);
+		return goodRaysCounter / allRaysCounter;
 	}
 	
 	public float computeHardShadows(Ray rayToLight)
