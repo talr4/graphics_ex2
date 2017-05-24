@@ -7,8 +7,7 @@ import RayTracing.RayTracer;
 public abstract class Surface {
 	
 	Material material;
-	
-	
+	float epsilon = (float)0.0001;
 
 	public Surface(Material material) {
 		super();
@@ -33,7 +32,6 @@ public abstract class Surface {
 	
 	public Objects.Color getOutputColorInPoint(Point point, Scene scene, Ray ray, RayTracer rayTracer, int recursionStep)
 	{
-		float epsilon = (float)0.0001;
 		Point normal = new Point(getNormal(point).getX(), getNormal(point).getY(), getNormal(point).getZ());
 		Point smallAddOn = normal.multiply(epsilon);
 		if(this instanceof Sphere){
@@ -107,9 +105,9 @@ public abstract class Surface {
 			b += getMaterial().getRb()*nextSurfaceReflectedInteractionColor.getBlue();
 		}
 		if(nextSurfaceRefractedInteractionColor != null){
-			r += getMaterial().getTransparency()*nextSurfaceRefractedInteractionColor.getRed();
-			g += getMaterial().getTransparency()*nextSurfaceRefractedInteractionColor.getGreen();
-			b += getMaterial().getTransparency()*nextSurfaceRefractedInteractionColor.getBlue();
+			r += (1-getMaterial().getTransparency())*nextSurfaceRefractedInteractionColor.getRed();
+			g += (1-getMaterial().getTransparency())*nextSurfaceRefractedInteractionColor.getGreen();
+			b += (1-getMaterial().getTransparency())*nextSurfaceRefractedInteractionColor.getBlue();
 		}
 		
 		if(g > 1)
@@ -139,7 +137,9 @@ public abstract class Surface {
 	}
 	
 	public Ray getRefractedRay(Ray ray, Point p) {
-		return new Ray(p, ray.getVector());
+		Ray refractedWithoutEpsilon = new Ray(p, ray.getVector());
+		Point withEpsilon = refractedWithoutEpsilon.getPointOnRayByDistance(epsilon*10);
+		return new Ray(withEpsilon, ray.getVector());
 	}
 	
 }
