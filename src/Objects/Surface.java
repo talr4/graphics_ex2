@@ -51,24 +51,26 @@ public abstract class Surface {
 			Vector v = new Vector(light.getPosition().getX() - point.getX(), light.getPosition().getY() - point.getY(), light.getPosition().getZ() - point.getZ());
 			
 			Ray rayToLight = new Ray(point, v);
-			
-			// check if there is interfering object between the surface and the light
-			boolean isInterfered = false;
-			for (Surface surface : scene.getSurfaces())
-			{
-				if (surface.findClosestIntesectionWithRay(rayToLight) != null)
-				{
-					isInterfered = true;
-				}
-			}
-			
-			if (isInterfered == false)
-			{
-				r += Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, ray));
-				g += Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, ray));
-				b += Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, ray));
 				
+			float Ir = Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, ray));
+			float Ig = Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, ray));
+			float Ib = Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, ray));
+			float softShadows;
+			if(scene.getShadowRaysNumber() == 1)
+			{
+				softShadows = light.computeHardShadows(scene, rayToLight, point);
 			}
+			else
+			{
+				softShadows = light.computeSoftShadowsCoef(scene, point, this, rayToLight);
+			}
+			
+			
+			r += (Ir*softShadows);
+			g += (Ig*softShadows);
+			b += (Ib*softShadows);
+				
+			
 
 		}
 		

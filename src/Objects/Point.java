@@ -47,7 +47,7 @@ public class Point {
 	
 	public float FindDistanceFromPoint(Point p)
 	{
-		return (float)Math.sqrt((this.x - p.x)*(this.x - p.x) + (this.y - p.y)*(this.y - p.y) + (this.z-p.z)*(this.z - p.z));
+		return (float)Math.sqrt((this.x - p.x)*(this.x - p.x) + (this.y - p.y)*(this.y - p.y) + (this.z - p.z)*(this.z - p.z));
 		
 	}
 	

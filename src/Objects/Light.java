@@ -104,11 +104,12 @@ public class Light {
 		int N = scene.getShadowRaysNumber();
 		Vector v = new Vector(2,6,7);
 		
+		//Find vector perpendicular to the ray
 		Vector vertical = v.crossProduct(rayToLight.getVector());
 		
 		float distance = position.FindDistanceFromPoint(point);
 		
-		Screen screen = RayTracer.calculateScreen(this.position, point, this.lightRadius, distance, vertical, scene.getShadowRaysNumber(), scene.getShadowRaysNumber());
+		Screen screen = RayTracer.calculateScreen(point, this.position, this.lightRadius, distance, vertical, scene.getShadowRaysNumber(), scene.getShadowRaysNumber());
 		
 		ArrayList<Ray> rays = new ArrayList<Ray>();
 		int badRaysCounter = 0;
@@ -125,14 +126,19 @@ public class Light {
 				Ray down = new Ray(screenRight, screen.getVertical());
 				Point screenPoint = down.getPointOnRayByDistance(screen.getPixelSize() * j + yNoise);
 				
-				Vector direction = new Vector(position, point);
-				Ray ray = new Ray(position, direction);
+				Vector direction = new Vector(point, screenPoint);
+				Ray ray = new Ray(point, direction);
 								
 				for (Surface surface1 : scene.getSurfaces())
 				{
 					Point p = surface1.findClosestIntesectionWithRay(ray);
-					
-					if ( p != null && p.FindDistanceFromPoint(position) <= point.FindDistanceFromPoint(position) )
+					float intersectionDistace = 0, pointDistance = 0;
+					if(p != null)
+					{
+						intersectionDistace = p.FindDistanceFromPoint(screenPoint);
+						pointDistance = point.FindDistanceFromPoint(screenPoint);
+					}
+					if ( p != null && intersectionDistace <= pointDistance)
 					{
 						badRaysCounter++;
 						break;
@@ -142,13 +148,30 @@ public class Light {
 		}
 		float allRaysCounter = (float)(N*N);
 		float goodRaysCounter = (float) (allRaysCounter - badRaysCounter);
+		
+		if( goodRaysCounter / allRaysCounter < 1)
+		{
+			int sanityCheck = 0;
+			sanityCheck++;
+		}
 		return goodRaysCounter / allRaysCounter;
 	}
 	
-	public float computeHardShadows(Ray rayToLight)
+	public float computeHardShadows(Scene scene, Ray rayToLight, Point point)
 	{
+		int returnValue = 1;
 		
-		return 0;
+		for (Surface surface : scene.getSurfaces())
+		{
+			
+			Point p = surface.findClosestIntesectionWithRay(rayToLight);
+			if ( p != null && p.FindDistanceFromPoint(position) <= point.FindDistanceFromPoint(position))
+			{
+				returnValue = 0;
+			}
+		}
+		
+		return returnValue;
 	}
 	
 	public float getR() {
