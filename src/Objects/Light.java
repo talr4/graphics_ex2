@@ -99,7 +99,7 @@ public class Light {
 		return (float) (surface.getMaterial().sb * Math.pow(rayFromViewer.getVector().dotProduct(R.getVector()), surface.getMaterial().getPhong())*this.getB()*specularIntensity);
 	}
 	
-	public float computeSoftShadowsCoef(Scene scene, Point point, Surface surface, Ray rayToLight)
+	public float computeSoftShadowsCoef(Scene scene, Point point, Surface surface, Ray rayToLight, Boolean bool)
 	{
 		int N = scene.getShadowRaysNumber();
 		Vector v = new Vector(2,6,7);
@@ -137,15 +137,22 @@ public class Light {
 					{
 						intersectionDistace = p.FindDistanceFromPoint(screenPoint);
 						pointDistance = point.FindDistanceFromPoint(screenPoint);
+
 					}
-					if ( p != null && intersectionDistace <= pointDistance)
+					if ( p != null && intersectionDistace < pointDistance)
 					{
+						if(surface1 != surface)
+						{
+							bool = true;
+						}
+
 						badRaysCounter++;
 						break;
 					}
 				}
 			}
 		}
+		badRaysCounter = (int)(badRaysCounter);
 		float allRaysCounter = (float)(N*N);
 		float goodRaysCounter = (float) (allRaysCounter - badRaysCounter);
 		
@@ -154,23 +161,35 @@ public class Light {
 			int sanityCheck = 0;
 			sanityCheck++;
 		}
+		if(goodRaysCounter != N*N)
+		{
+			return (goodRaysCounter / allRaysCounter);
+		}
 		return goodRaysCounter / allRaysCounter;
 	}
 	
-	public float computeHardShadows(Scene scene, Ray rayToLight, Point point)
+	public float computeHardShadows(Scene scene, Surface surface, Ray rayFromLight, Point point, Boolean bool)
 	{
 		int returnValue = 1;
 		
-		for (Surface surface : scene.getSurfaces())
+		for (Surface surface1 : scene.getSurfaces())
 		{
+			Point p = surface1.findClosestIntesectionWithRay(rayFromLight);
 			
-			Point p = surface.findClosestIntesectionWithRay(rayToLight);
-			if ( p != null && p.FindDistanceFromPoint(position) <= point.FindDistanceFromPoint(position))
+			if ( p != null && p.FindDistanceFromPoint(position) < point.FindDistanceFromPoint(position))
 			{
+				if(surface1 != surface)
+				{
+					surface.isInterfered = true;
+				}
+
 				returnValue = 0;
-			}
+			}	
 		}
-		
+		//if(returnValue == 0)
+		//{
+		//	return (1-this.shadowIntensity);
+		//}
 		return returnValue;
 	}
 	
