@@ -1,7 +1,5 @@
 package Objects;
 
-import java.awt.*;
-
 public class Camera {
 	private Point Position;
 	private Point lookAt;

@@ -1,12 +1,6 @@
 package Objects;
-
-import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Random;
 import RayTracing.RayTracer;
-
-
-import javax.imageio.ImageIO;
 
 public class Light {
 	private Point position;
@@ -99,7 +93,7 @@ public class Light {
 		return (float) (surface.getMaterial().sb * Math.pow(rayFromViewer.getVector().dotProduct(R.getVector()), surface.getMaterial().getPhong())*this.getB()*specularIntensity);
 	}
 	
-	public float computeSoftShadowsCoef(Scene scene, Point point, Surface surface, Ray rayToLight, Boolean bool)
+	public float computeSoftShadowsCoef(Scene scene, Point point, Surface surface, Ray rayToLight)
 	{
 		int N = scene.getShadowRaysNumber();
 		Vector v = new Vector(2,6,7);
@@ -111,8 +105,7 @@ public class Light {
 		
 		Screen screen = RayTracer.calculateScreen(point, this.position, this.lightRadius, distance, vertical, scene.getShadowRaysNumber(), scene.getShadowRaysNumber());
 		
-		ArrayList<Ray> rays = new ArrayList<Ray>();
-		int badRaysCounter = 0;
+		float badRaysCounter = 0;
 		Random random = new Random();
 		for (int i = 0; i < scene.getShadowRaysNumber(); i++) {
 			for (int j = 0; j < scene.getShadowRaysNumber(); j++) {
@@ -129,6 +122,7 @@ public class Light {
 				Vector direction = new Vector(point, screenPoint);
 				Ray ray = new Ray(point, direction);
 								
+				float badCoef = 0;
 				for (Surface surface1 : scene.getSurfaces())
 				{
 					Point p = surface1.findClosestIntesectionWithRay(ray);
@@ -143,35 +137,31 @@ public class Light {
 					{
 						if(surface1 != surface)
 						{
-							bool = true;
+							surface.isInterfered = true;
 						}
-
-						badRaysCounter++;
-						break;
+						
+						if(surface1.getMaterial().getTransparency() == 0){
+							badCoef = 1;
+							break;
+						}else{
+							badCoef = 1 - ( (1 - badCoef) * (surface1.getMaterial().getTransparency()));
+						}
+						
+						
 					}
 				}
+				badRaysCounter += badCoef;
 			}
 		}
-		badRaysCounter = (int)(badRaysCounter);
 		float allRaysCounter = (float)(N*N);
-		float goodRaysCounter = (float) (allRaysCounter - badRaysCounter);
+		float goodRaysCounter = (allRaysCounter - badRaysCounter);
 		
-		if( goodRaysCounter / allRaysCounter < 1)
-		{
-			int sanityCheck = 0;
-			sanityCheck++;
-		}
-		if(goodRaysCounter != N*N)
-		{
-			return (goodRaysCounter / allRaysCounter);
-		}
 		return goodRaysCounter / allRaysCounter;
 	}
 	
-	public float computeHardShadows(Scene scene, Surface surface, Ray rayFromLight, Point point, Boolean bool)
+	public float computeHardShadows(Scene scene, Surface surface, Ray rayFromLight, Point point)
 	{
-		int returnValue = 1;
-		
+		float badCoef = 0;
 		for (Surface surface1 : scene.getSurfaces())
 		{
 			Point p = surface1.findClosestIntesectionWithRay(rayFromLight);
@@ -183,14 +173,16 @@ public class Light {
 					surface.isInterfered = true;
 				}
 
-				returnValue = 0;
+				if(surface1.getMaterial().getTransparency() == 0){
+					badCoef = 1;
+					break;
+				}else{
+					badCoef = 1 - ( (1 - badCoef) * (surface1.getMaterial().getTransparency()));
+				}
 			}	
 		}
-		//if(returnValue == 0)
-		//{
-		//	return (1-this.shadowIntensity);
-		//}
-		return returnValue;
+
+		return 1-badCoef;
 	}
 	
 	public float getR() {

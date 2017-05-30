@@ -1,6 +1,5 @@
 package Objects;
 
-import java.awt.Color;
 import java.util.List;
 
 public class Scene {

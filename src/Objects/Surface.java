@@ -53,14 +53,14 @@ public abstract class Surface {
 			
 			Ray rayToLight = new Ray(point, v);
 				
-			float Ir = Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, ray));
-			float Ig = Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, ray));
-			float Ib = Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, ray));
+			float Ir = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, ray)));
+			float Ig = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, ray)));
+			float Ib = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, ray)));
 			float softShadows, hardShadows;
-			Boolean bool = false;
+
 			Vector v1 = new Vector(light.getPosition(), point);
 			Ray rayFromLight = new Ray(light.getPosition(), v1);
-			hardShadows = light.computeHardShadows(scene, this, rayFromLight, point, bool);
+			hardShadows = light.computeHardShadows(scene, this, rayFromLight, point);
 			
 			if(scene.getShadowRaysNumber() == 1)
 			{
@@ -68,7 +68,7 @@ public abstract class Surface {
 			}
 			else
 			{
-				softShadows = light.computeSoftShadowsCoef(scene, point, this, rayToLight, bool);
+				softShadows = light.computeSoftShadowsCoef(scene, point, this, rayToLight);
 			}
 			
 			float Ir0 = Ir*(1-light.getShadowIntensity());
@@ -129,9 +129,9 @@ public abstract class Surface {
 			b += getMaterial().getRb()*nextSurfaceReflectedInteractionColor.getBlue();
 		}
 		if(nextSurfaceRefractedInteractionColor != null){
-			r += (1-getMaterial().getTransparency())*nextSurfaceRefractedInteractionColor.getRed();
-			g += (1-getMaterial().getTransparency())*nextSurfaceRefractedInteractionColor.getGreen();
-			b += (1-getMaterial().getTransparency())*nextSurfaceRefractedInteractionColor.getBlue();
+			r += getMaterial().getTransparency()*nextSurfaceRefractedInteractionColor.getRed();
+			g += getMaterial().getTransparency()*nextSurfaceRefractedInteractionColor.getGreen();
+			b += getMaterial().getTransparency()*nextSurfaceRefractedInteractionColor.getBlue();
 		}
 		
 		if(g > 1)

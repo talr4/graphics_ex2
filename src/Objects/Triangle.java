@@ -1,7 +1,5 @@
 package Objects;
 
-import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
-
 public class Triangle extends Surface {
 	
 	private Point vertex1;
