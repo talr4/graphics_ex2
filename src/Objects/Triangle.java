@@ -5,7 +5,7 @@ public class Triangle extends Surface {
 	private Point vertex1;
 	private Point vertex2;
 	private Point vertex3;
-	
+	private Vector normal;
 	
 	
 	public Triangle(Point vertex1, Point vertex2, Point vertex3, Material material) {
@@ -13,6 +13,12 @@ public class Triangle extends Surface {
 		this.vertex1 = vertex1;
 		this.vertex2 = vertex2;
 		this.vertex3 = vertex3;
+		Vector vector1 = new Vector(vertex3.getX() - vertex1.getX(), vertex3.getY() - vertex1.getY(), vertex3.getZ() - vertex1.getZ());
+		Vector vector2 = new Vector(vertex3.getX() - vertex2.getX(), vertex3.getY() - vertex2.getY(), vertex3.getZ() - vertex2.getZ());
+		Vector normal = vector1.crossProduct(vector2);
+		float offset = normal.dotProductWithPoint(vertex1);
+		Plane plane = new Plane(normal, offset, material);
+		this.normal = plane.getNormal(null);
 	}
 	
 	public Point getVertex1() {
@@ -37,11 +43,7 @@ public class Triangle extends Surface {
 	@Override
 	public Vector getNormal(Point p)
 	{
-		Vector vector1 = new Vector(vertex3.getX() - vertex1.getX(), vertex3.getY() - vertex1.getY(), vertex3.getZ() - vertex1.getZ());
-		Vector vector2 = new Vector(vertex3.getX() - vertex2.getX(), vertex3.getY() - vertex2.getY(), vertex3.getZ() - vertex2.getZ());
-		Vector normal = vector1.crossProduct(vector2);
-		
-		return normal;
+		return this.normal;
 	}
 	@Override
 	public Point findClosestIntesectionWithRay(Ray ray) {

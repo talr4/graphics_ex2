@@ -9,8 +9,12 @@ public class Plane extends Surface{
 	
 	public Plane(Vector normal, float offset, Material material) {
 		super(material);
-		this.normal = normal.multiply(-1);
+		this.normal = normal;
 		this.offset = offset;
+		Ray ray = new Ray(new Point(0,0,0),normal);
+		Point onPlane = ray.getPointOnRayByDistance(offset);
+		if(normal.dotProductWithPoint(onPlane) + offset !=0){
+		}
 	}
 	
 	@Override
