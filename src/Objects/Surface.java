@@ -7,13 +7,12 @@ import RayTracing.RayTracer;
 public abstract class Surface {
 	
 	Material material;
-	boolean isInterfered;
 	float epsilon = (float)0.0001;
 
 	public Surface(Material material) {
 		super();
 		this.material = material;
-		isInterfered = false;
+
 	}
 
 	public Material getMaterial() {
@@ -34,7 +33,6 @@ public abstract class Surface {
 	
 	public Objects.Color getOutputColorInPoint(Point point, Scene scene, Ray ray, RayTracer rayTracer, int recursionStep)
 	{
-		this.isInterfered = false;
 		Point normal = new Point(getNormal(point).getX(), getNormal(point).getY(), getNormal(point).getZ());
 		Point smallAddOn = normal.multiply(epsilon);
 		if(this instanceof Sphere){
@@ -56,15 +54,14 @@ public abstract class Surface {
 			float Ir = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, ray)));
 			float Ig = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, ray)));
 			float Ib = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, ray)));
-			float softShadows, hardShadows;
+			float softShadows;
 
 			Vector v1 = new Vector(light.getPosition(), point);
 			Ray rayFromLight = new Ray(light.getPosition(), v1);
-			hardShadows = light.computeHardShadows(scene, this, rayFromLight, point);
 			
 			if(scene.getShadowRaysNumber() == 1)
 			{
-				softShadows = hardShadows;
+				softShadows = light.computeHardShadows(scene, this, rayFromLight, point);
 			}
 			else
 			{
@@ -74,24 +71,19 @@ public abstract class Surface {
 			float Ir0 = Ir*(1-light.getShadowIntensity());
 			float Ig0 = Ig*(1-light.getShadowIntensity());
 			float Ib0 = Ib*(1-light.getShadowIntensity());
-			if(this.isInterfered == false)
+			
+			if(this.findClosestIntesectionWithRay(rayToLight) != null )
 			{
 				r += (Ir*softShadows);
 				g += (Ig*softShadows);
 				b += (Ib*softShadows);
 			}
 			else
-			{
+			{		
 				r += (Ir0 +softShadows*(Ir-Ir0));
 				g += (Ig0 +softShadows*(Ig-Ig0));
 				b += (Ib0 +softShadows*(Ib-Ib0));
-			}
-
-			
-			//r += (Ir*softShadows);
-			//g += (Ig*softShadows);
-			//b += (Ib*softShadows);
-				
+			}				
 			
 
 		}

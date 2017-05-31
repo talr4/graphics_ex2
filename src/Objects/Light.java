@@ -119,9 +119,9 @@ public class Light {
 				Ray down = new Ray(screenRight, screen.getVertical());
 				Point screenPoint = down.getPointOnRayByDistance(screen.getPixelSize() * j + yNoise);
 				
-				Vector direction = new Vector(point, screenPoint);
-				Ray ray = new Ray(point, direction);
-								
+				Vector direction = new Vector(screenPoint, point);
+				Ray ray = new Ray(screenPoint, direction);				
+				
 				float badCoef = 0;
 				for (Surface surface1 : scene.getSurfaces())
 				{
@@ -135,10 +135,6 @@ public class Light {
 					}
 					if ( p != null && intersectionDistace < pointDistance)
 					{
-						if(surface1 != surface)
-						{
-							surface.isInterfered = true;
-						}
 						
 						if(surface1.getMaterial().getTransparency() == 0){
 							badCoef = 1;
@@ -146,7 +142,6 @@ public class Light {
 						}else{
 							badCoef = 1 - ( (1 - badCoef) * (surface1.getMaterial().getTransparency()));
 						}
-						
 						
 					}
 				}
@@ -168,10 +163,6 @@ public class Light {
 			
 			if ( p != null && p.FindDistanceFromPoint(position) < point.FindDistanceFromPoint(position))
 			{
-				if(surface1 != surface)
-				{
-					surface.isInterfered = true;
-				}
 
 				if(surface1.getMaterial().getTransparency() == 0){
 					badCoef = 1;

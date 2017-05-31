@@ -204,7 +204,7 @@ public class RayTracer {
 					Float v3z = Float.parseFloat(params[8]);
 					Point v3 = new Point(v3x, v3y, v3z);
 
-					int matIndex = Integer.parseInt(params[4]);
+					int matIndex = Integer.parseInt(params[9]);
 					Material material = scene.materials.get(matIndex - 1);
 
 					Triangle tri = new Triangle(v1, v2, v3, material);
@@ -257,6 +257,12 @@ public class RayTracer {
 			for (int y = 0; y < this.imageHeight; y++) {
 				ArrayList<Ray> rays = getRaysByPixel(scene.getCamera().getScreen(), scene.getCamera().getPosition(), x,
 						y, scene.getSuperSamplingLevel());
+				if(y==237&&x==275)
+				{
+					int check = 0;
+					check++;
+
+				}
 				ArrayList<Objects.Color> colors = new ArrayList<>();
 				for (Ray ray : rays) {
 					Intersection intersection = getIntersectionFromRay(ray);
