@@ -50,14 +50,14 @@ public abstract class Surface {
 			Vector v = new Vector(light.getPosition().getX() - point.getX(), light.getPosition().getY() - point.getY(), light.getPosition().getZ() - point.getZ());
 			
 			Ray rayToLight = new Ray(point, v);
-				
-			float Ir = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, ray)));
-			float Ig = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, ray)));
-			float Ib = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, ray)));
-			float softShadows;
-
 			Vector v1 = new Vector(light.getPosition(), point);
 			Ray rayFromLight = new Ray(light.getPosition(), v1);
+
+			float Ir = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, rayFromLight, ray)));
+			float Ig = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, rayFromLight, ray)));
+			float Ib = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, rayFromLight, ray)));
+			float softShadows;
+
 			
 			if(scene.getShadowRaysNumber() == 1)
 			{

@@ -72,23 +72,24 @@ public class Light {
 
 	}
 	
-	public float getSpecularColorR(Point point, Surface surface, Ray rayToLight, Ray rayFromViewer) 
+	public float getSpecularColorR(Point point, Surface surface, Ray rayToLight, Ray rayFromLight, Ray rayFromViewer) 
 	{
-		Ray R = surface.getReflectedRay(rayToLight,point);
+		
+		Ray R = surface.getReflectedRay(rayFromLight,point);
 
 		return (float) (surface.getMaterial().sr * Math.pow(rayFromViewer.getVector().dotProduct(R.getVector()), surface.getMaterial().getPhong())*this.getR()*specularIntensity);
 	}
 	
-	public float getSpecularColorG(Point point, Surface surface, Ray rayToLight, Ray rayFromViewer) 
+	public float getSpecularColorG(Point point, Surface surface, Ray rayToLight, Ray rayFromLight, Ray rayFromViewer) 
 	{
-		Ray R = surface.getReflectedRay(rayToLight,point);
+		Ray R = surface.getReflectedRay(rayFromLight,point);
 
 		return (float) (surface.getMaterial().sg * Math.pow(rayFromViewer.getVector().dotProduct(R.getVector()), surface.getMaterial().getPhong())*this.getG()*specularIntensity);
 	}
 	
-	public float getSpecularColorB(Point point, Surface surface, Ray rayToLight, Ray rayFromViewer) 
+	public float getSpecularColorB(Point point, Surface surface, Ray rayToLight, Ray rayFromLight, Ray rayFromViewer) 
 	{
-		Ray R = surface.getReflectedRay(rayToLight,point);
+		Ray R = surface.getReflectedRay(rayFromLight,point);
 
 		return (float) (surface.getMaterial().sb * Math.pow(rayFromViewer.getVector().dotProduct(R.getVector()), surface.getMaterial().getPhong())*this.getB()*specularIntensity);
 	}
