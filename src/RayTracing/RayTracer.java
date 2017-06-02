@@ -257,12 +257,6 @@ public class RayTracer {
 			for (int y = 0; y < this.imageHeight; y++) {
 				ArrayList<Ray> rays = getRaysByPixel(scene.getCamera().getScreen(), scene.getCamera().getPosition(), x,
 						y, scene.getSuperSamplingLevel());
-				if(y==237&&x==275)
-				{
-					int check = 0;
-					check++;
-
-				}
 				ArrayList<Objects.Color> colors = new ArrayList<>();
 				for (Ray ray : rays) {
 					Intersection intersection = getIntersectionFromRay(ray);
@@ -330,8 +324,8 @@ public class RayTracer {
 				if (closestIntersection == null) {
 					closestIntersection = intersection;
 					closestSurface = surface;
-				} else if (scene.getCamera().getPosition().FindDistanceFromPoint(intersection) < scene
-						.getCamera().getPosition().FindDistanceFromPoint(closestIntersection)) {
+				} else if (ray.getPoint().FindDistanceFromPoint(intersection) < 
+						ray.getPoint().FindDistanceFromPoint(closestIntersection)) {
 					closestIntersection = intersection;
 					closestSurface = surface;
 				}
