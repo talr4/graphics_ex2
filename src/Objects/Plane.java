@@ -14,6 +14,7 @@ public class Plane extends Surface{
 		Ray ray = new Ray(new Point(0,0,0),normal);
 		Point onPlane = ray.getPointOnRayByDistance(offset);
 		if(normal.dotProductWithPoint(onPlane) + offset !=0){
+			this.normal = normal.multiply(-1);
 		}
 	}
 	
