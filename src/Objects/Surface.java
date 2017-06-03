@@ -56,6 +56,13 @@ public abstract class Surface {
 			float Ir = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorR(point, this, rayToLight)) +  Math.abs(light.getSpecularColorR(point, this, rayToLight, rayFromLight, ray)));
 			float Ig = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorG(point, this, rayToLight)) +  Math.abs(light.getSpecularColorG(point, this, rayToLight, rayFromLight, ray)));
 			float Ib = (1-getMaterial().getTransparency())*(Math.abs(light.getDiffuseColorB(point, this, rayToLight)) +  Math.abs(light.getSpecularColorB(point, this, rayToLight, rayFromLight, ray)));
+			
+			//if(this instanceof Plane && this.getNormal(null).dotProduct(rayToLight.getVector()) < 0)
+			//{
+			//	Ir -= (1-getMaterial().getTransparency())*Math.abs(light.getSpecularColorR(point, this, rayToLight, rayFromLight, ray));
+			//	Ig -= (1-getMaterial().getTransparency())*Math.abs(light.getSpecularColorG(point, this, rayToLight, rayFromLight, ray));
+			//	Ib -= (1-getMaterial().getTransparency())*Math.abs(light.getSpecularColorB(point, this, rayToLight, rayFromLight, ray));
+			//}
 			float softShadows;
 
 			
